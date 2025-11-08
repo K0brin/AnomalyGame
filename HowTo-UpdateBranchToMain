@@ -1,6 +1,6 @@
 1) git checkout master
 2) git pull - makes sure master branch is updated
 2) git checkout (feature branch name)
-3) git merge master
+3) git merge origin/master
 
 This should update your feature branch to include all master branch updates

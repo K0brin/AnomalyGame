@@ -1,44 +1,50 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EntitySpawner : MonoBehaviour
 {
-    [SerializeField] private EntityType_ScriptableObject[] scriptableObjects; 
+    [SerializeField] private EntityType_ScriptableObject[] scriptableObjects;
     [SerializeField] private RoomHolder[] roomHolders;
-    private string[] activatedRoom; // needs to be list to be updated during runtime
-    private string[] activatedType;// needs to be list to be updated during runtime
+    private List<string> roomActivated = new List<string>();
+    private List<string> typeActivated = new List<string>();
+    private List<GameObject> activeObject = new List<GameObject>();
 
     void Start()
     {
-        activatedRoom = new string[1];
-        activatedType = new string[1];
-        activatedRoom[0] = "default";
-        activatedType[0] = "default";
+        SpawnExtraObject();
+        SpawnExtraObject();
+        SpawnExtraObject();
+        SpawnExtraObject();
 
-
-        SpawnExtraObject();
-        SpawnExtraObject();
-        SpawnExtraObject();
-        SpawnExtraObject();
+        AttemptDeleteEntity("Room1", "ExtraObject");
     }
 
-    public void CheckCalledEntity(string room, string type)
+    public void AttemptDeleteEntity(string room, string type)
     {
-        for(int i = 0; i < activatedRoom.Length; i++)
+        foreach(string localRoom in roomActivated)
         {
-            if(activatedRoom[i] == room)
+            if(localRoom == room)
             {
-                if(activatedType[i] == type)
+                foreach(string localType in typeActivated)
                 {
-                    DeleteEntity();
+                    if(localType == type)
+                    { 
+                        DeleteEntity(typeActivated.IndexOf(localType));
+                        Debug.Log("Entity Delete Function Ran");
+                        return;
+                    }
+                    Debug.Log("Is Room; Is not Type");
                 }
             }
+            Debug.Log("Is not Room");
         }
     }
 
-    private void DeleteEntity()
+    private void DeleteEntity(int typeIndex)
     {
-        
+        //type and room index should be same number
+        Destroy(activeObject[typeIndex]);
     }
 
     public void SpawnExtraObject()
@@ -55,12 +61,15 @@ public class EntitySpawner : MonoBehaviour
             if(scriptableObjects[i].typeName == "ExtraObject")
             {
                 GameObject entityPrefab = scriptableObjects[i].RandomGameobject();
-                Instantiate(entityPrefab, spawnLocation);
+                GameObject spawnedEntity = Instantiate(entityPrefab, spawnLocation);
                 //spawn object
+
+                roomActivated.Add(roomHolders[i].roomName);
+                Debug.Log(roomHolders[i].roomName);
+                typeActivated.Add(scriptableObjects[i].typeName);
+                activeObject.Add(spawnedEntity);
+                //add to spawned list
             }
         }
-
-
-        
     }
 }

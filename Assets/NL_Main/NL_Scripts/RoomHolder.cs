@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class RoomHolder : MonoBehaviour
 {
+    public string roomName = "default";
     public Transform[] spawnLocations;
     private List<bool> locationActive = new List<bool>();
 

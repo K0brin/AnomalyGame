@@ -5,8 +5,8 @@ public class EntitySpawner : MonoBehaviour
 {
     [SerializeField] private EntityType_ScriptableObject[] scriptableObjects; 
     [SerializeField] private RoomHolder[] roomHolders;
-    private string[] activatedRoom;
-    private string[] activatedType;
+    private string[] activatedRoom; // needs to be list to be updated during runtime
+    private string[] activatedType;// needs to be list to be updated during runtime
 
     void Start()
     {
@@ -16,10 +16,10 @@ public class EntitySpawner : MonoBehaviour
         activatedType[0] = "default";
 
 
-        SpawnRandomObject();
-        SpawnRandomObject();
-        SpawnRandomObject();
-        SpawnRandomObject();
+        SpawnExtraObject();
+        SpawnExtraObject();
+        SpawnExtraObject();
+        SpawnExtraObject();
     }
 
     public void CheckCalledEntity(string room, string type)
@@ -41,7 +41,7 @@ public class EntitySpawner : MonoBehaviour
         
     }
 
-    public void SpawnRandomObject()
+    public void SpawnExtraObject()
     {
         //pick room this dictates location
         int randomRoom = UnityEngine.Random.Range(0,roomHolders.Length);
@@ -49,10 +49,18 @@ public class EntitySpawner : MonoBehaviour
         //pick type
         int randomType = UnityEngine.Random.Range(0,scriptableObjects.Length);
         //0 for now since only one scriptable object
-        GameObject entityPrefab = scriptableObjects[0].RandomGameobject();
-        //spawn object
+        
+        for(int i = 0; i < scriptableObjects.Length; i++)
+        {
+            if(scriptableObjects[i].typeName == "ExtraObject")
+            {
+                GameObject entityPrefab = scriptableObjects[i].RandomGameobject();
+                Instantiate(entityPrefab, spawnLocation);
+                //spawn object
+            }
+        }
 
-        Instantiate(entityPrefab, spawnLocation);
+
         
     }
 }

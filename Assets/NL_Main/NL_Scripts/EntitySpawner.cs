@@ -17,7 +17,7 @@ public class EntitySpawner : MonoBehaviour
         SpawnExtraObject();
         SpawnExtraObject();
 
-        AttemptDeleteEntity("Room1", "ExtraObject");
+        //AttemptDeleteEntity("Room1", "ExtraObject");
     }
 
     public void AttemptDeleteEntity(string room, string type)

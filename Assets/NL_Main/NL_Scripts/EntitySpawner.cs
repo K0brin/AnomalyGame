@@ -17,7 +17,8 @@ public class EntitySpawner : MonoBehaviour
         SpawnExtraObject();
         SpawnExtraObject();
 
-        //AttemptDeleteEntity("Room1", "ExtraObject");
+        Debug.Log("attempt delete");
+        AttemptDeleteEntity("Room1", "ExtraObject");
     }
 
     public void AttemptDeleteEntity(string room, string type)
@@ -44,7 +45,7 @@ public class EntitySpawner : MonoBehaviour
     private void DeleteEntity(int typeIndex)
     {
         //type and room index should be same number
-        Destroy(activeObject[typeIndex]);
+        //Destroy(activeObject[typeIndex]);
     }
 
     public void SpawnExtraObject()
@@ -60,16 +61,44 @@ public class EntitySpawner : MonoBehaviour
         {
             if(scriptableObjects[i].typeName == "ExtraObject")
             {
-                GameObject entityPrefab = scriptableObjects[i].RandomGameobject();
-                GameObject spawnedEntity = Instantiate(entityPrefab, spawnLocation);
-                //spawn object
+                if (!CheckAlreadySpawned(roomHolders[randomRoom].roomName, scriptableObjects[i].typeName))
+                { 
+                    GameObject entityPrefab = scriptableObjects[i].RandomGameobject();
+                    GameObject spawnedEntity = Instantiate(entityPrefab, spawnLocation);
+                    //spawn object
 
-                roomActivated.Add(roomHolders[i].roomName);
-                Debug.Log(roomHolders[i].roomName);
-                typeActivated.Add(scriptableObjects[i].typeName);
-                activeObject.Add(spawnedEntity);
-                //add to spawned list
+                    roomActivated.Add(roomHolders[randomRoom].roomName);
+                    Debug.Log(roomHolders[randomRoom].roomName);
+                    typeActivated.Add(scriptableObjects[i].typeName);
+                    activeObject.Add(spawnedEntity);
+                    //add to spawned list
+                }
+                else
+                {
+                    Debug.Log("failed to spawn");
+                }
+
             }
         }
+    }
+
+    private bool CheckAlreadySpawned(string roomName, string entityType)
+    {
+        foreach(string localRoom in roomActivated)
+        {
+            if(localRoom == roomName)
+            {
+                foreach(string localType in typeActivated)
+                {
+                    if(localType == entityType)
+                    { 
+                        return true;
+                    }
+                    Debug.Log("Is Room; Is not Type");
+                }
+            }
+            Debug.Log("Is not Room");
+        }
+        return false;
     }
 }

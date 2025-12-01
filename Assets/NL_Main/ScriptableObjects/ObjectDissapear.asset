@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d7015e1701703b4ba2b528e130007d1, type: 3}
   m_Name: ObjectDissapear
   m_EditorClassIdentifier: 
-  typeName: ExtraObject
+  typeName: ObjectDissapear
   entityPrefabs:
   - {fileID: 3519390995078837703, guid: 71db85294caec8c409378262f19b607f, type: 3}
   - {fileID: 4822926058100648557, guid: b2ceeda99b98e3c468462851751edc7f, type: 3}

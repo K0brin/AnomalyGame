@@ -6,18 +6,20 @@ public class EntitySpawner : MonoBehaviour
 {
     [SerializeField] private EntityType_ScriptableObject[] scriptableObjects;
     [SerializeField] private RoomHolder[] roomHolders;
+    [SerializeField] private List<Transform> dissapearTransforms = new List<Transform>();
     private List<string> roomActivated = new List<string>();
     private List<string> typeActivated = new List<string>();
     private List<GameObject> activeObject = new List<GameObject>();
 
     void Start()
     {
+        SpawnDissapearableObjects();
+
         SpawnExtraObject();
         SpawnExtraObject();
         SpawnExtraObject();
 
-        Debug.Log("attempt delete");
-        AttemptDeleteEntity("Room3", "ExtraObject");
+        AttemptDeleteEntity("Room1", "ExtraObject");
     }
 
     public void AttemptDeleteEntity(string room, string type)
@@ -30,24 +32,23 @@ public class EntitySpawner : MonoBehaviour
                 {
                     if(localType == type)
                     { 
-                        Debug.Log("Entity Delete Function Ran");
-                        DeleteEntity(typeActivated.IndexOf(localType));
+                        DeleteEntity(typeActivated.IndexOf(localType), roomActivated.IndexOf(localRoom));
                         return;
                     }
-                    Debug.Log("Is Room; Is not Type");
                 }
             }
-            Debug.Log("Is not Room");
         }
     }
 
-    private void DeleteEntity(int typeIndex)
+    private void DeleteEntity(int typeIndex, int roomIndex)
     {
-        Destroy(activeObject[typeIndex]);
-        activeObject.Remove(activeObject[typeIndex]);
-        roomActivated.Remove(roomActivated[typeIndex]);
-        typeActivated.Remove(typeActivated[typeIndex]);
-        Debug.Log("Delete Successful");
+        if(typeActivated[typeIndex] == "ExtraObject")
+        {
+            Destroy(activeObject[roomIndex]);
+            activeObject.Remove(activeObject[typeIndex]);
+            roomActivated.Remove(roomActivated[roomIndex]);
+            typeActivated.Remove(typeActivated[typeIndex]);
+        }
     }
 
     public void SpawnExtraObject()
@@ -81,7 +82,6 @@ public class EntitySpawner : MonoBehaviour
                 else
                 {
                     SpawnExtraObject();
-                    Debug.Log("failed to spawn");
                 }
     }
 
@@ -95,7 +95,6 @@ public class EntitySpawner : MonoBehaviour
                 {
                     if(localType == entityType)
                     { 
-                        Debug.Log("already spawned");
                         return true;
                     }
                     
@@ -115,6 +114,27 @@ public class EntitySpawner : MonoBehaviour
             case 0: SpawnExtraObject(); break;
 
 
+        }
+    }
+
+    private void SpawnDissapearableObjects()
+    {
+        Debug.Log("spawn");
+        for(int i = 0; i < scriptableObjects.Length; i++)
+        {
+            if(scriptableObjects[i].typeName == "ObjectDissapear")
+            {
+                Debug.Log("name is same");
+                //spawn every prefab
+                foreach(GameObject entity in scriptableObjects[i].entityPrefabs)
+                {
+                    //TODO make sure prefabs have set transforms
+                    int randomTransform = UnityEngine.Random.Range(0,dissapearTransforms.Count);
+                    Instantiate(entity, dissapearTransforms[randomTransform]);
+                    dissapearTransforms.Remove(dissapearTransforms[randomTransform]);
+                }
+            }
+                        
         }
     }
 }

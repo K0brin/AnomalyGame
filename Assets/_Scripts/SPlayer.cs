@@ -2,15 +2,21 @@ using UnityEngine;
 
 public class SPlayer : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void OnEnable()
     {
-        
+       
+        SGameInput.Instance.OnCameraSwitchInput += HandleCameraSwitchInput;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnDisable()
     {
         
+        SGameInput.Instance.OnCameraSwitchInput -= HandleCameraSwitchInput;
+    }
+
+    private void HandleCameraSwitchInput(object sender, Vector2 input)
+    {
+        //forward the camera switch input to the SCameraManager
+        SCameraManager.Instance.HandleCameraSwitch(input);
     }
 }

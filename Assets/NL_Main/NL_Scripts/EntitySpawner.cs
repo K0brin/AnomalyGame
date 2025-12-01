@@ -15,10 +15,9 @@ public class EntitySpawner : MonoBehaviour
         SpawnExtraObject();
         SpawnExtraObject();
         SpawnExtraObject();
-        SpawnExtraObject();
 
         Debug.Log("attempt delete");
-        AttemptDeleteEntity("Room1", "ExtraObject");
+        AttemptDeleteEntity("Room3", "ExtraObject");
     }
 
     public void AttemptDeleteEntity(string room, string type)
@@ -31,8 +30,8 @@ public class EntitySpawner : MonoBehaviour
                 {
                     if(localType == type)
                     { 
-                        DeleteEntity(typeActivated.IndexOf(localType));
                         Debug.Log("Entity Delete Function Ran");
+                        DeleteEntity(typeActivated.IndexOf(localType));
                         return;
                     }
                     Debug.Log("Is Room; Is not Type");
@@ -44,42 +43,46 @@ public class EntitySpawner : MonoBehaviour
 
     private void DeleteEntity(int typeIndex)
     {
-        //type and room index should be same number
-        //Destroy(activeObject[typeIndex]);
+        Destroy(activeObject[typeIndex]);
+        activeObject.Remove(activeObject[typeIndex]);
+        roomActivated.Remove(roomActivated[typeIndex]);
+        typeActivated.Remove(typeActivated[typeIndex]);
+        Debug.Log("Delete Successful");
     }
 
     public void SpawnExtraObject()
     {
-        //pick room this dictates location
-        int randomRoom = UnityEngine.Random.Range(0,roomHolders.Length);
-        Transform spawnLocation = roomHolders[randomRoom].RandomLocation();
-        //pick type
-        int randomType = UnityEngine.Random.Range(0,scriptableObjects.Length);
-        //0 for now since only one scriptable object
         
-        for(int i = 0; i < scriptableObjects.Length; i++)
-        {
-            if(scriptableObjects[i].typeName == "ExtraObject")
-            {
-                if (!CheckAlreadySpawned(roomHolders[randomRoom].roomName, scriptableObjects[i].typeName))
+        int randomRoom = UnityEngine.Random.Range(0,roomHolders.Length);
+        
+            
+                if (!CheckAlreadySpawned(roomHolders[randomRoom].roomName, "ExtraObject"))
                 { 
-                    GameObject entityPrefab = scriptableObjects[i].RandomGameobject();
-                    GameObject spawnedEntity = Instantiate(entityPrefab, spawnLocation);
+                    Transform spawnLocation = roomHolders[randomRoom].RandomLocation();
+
+                    for(int i = 0; i < scriptableObjects.Length; i++)
+                    {
+                        if(scriptableObjects[i].typeName == "ExtraObject")
+                        {
+                            GameObject entityPrefab = scriptableObjects[i].RandomGameobject();
+                            GameObject spawnedEntity = Instantiate(entityPrefab, spawnLocation);
+                    
+                            activeObject.Add(spawnedEntity);
+                        }
+                        
+                    }
+
                     //spawn object
 
                     roomActivated.Add(roomHolders[randomRoom].roomName);
-                    Debug.Log(roomHolders[randomRoom].roomName);
-                    typeActivated.Add(scriptableObjects[i].typeName);
-                    activeObject.Add(spawnedEntity);
+                    typeActivated.Add("ExtraObject");
                     //add to spawned list
                 }
                 else
                 {
+                    SpawnExtraObject();
                     Debug.Log("failed to spawn");
                 }
-
-            }
-        }
     }
 
     private bool CheckAlreadySpawned(string roomName, string entityType)
@@ -92,13 +95,26 @@ public class EntitySpawner : MonoBehaviour
                 {
                     if(localType == entityType)
                     { 
+                        Debug.Log("already spawned");
                         return true;
                     }
-                    Debug.Log("Is Room; Is not Type");
+                    
                 }
             }
-            Debug.Log("Is not Room");
+            
         }
         return false;
+    }
+
+    private void SpawnAnomaly()
+    {
+        //call random spawn function
+        int randNum = UnityEngine.Random.Range(0,scriptableObjects.Length);
+        switch(randNum)
+        {
+            case 0: SpawnExtraObject(); break;
+
+
+        }
     }
 }

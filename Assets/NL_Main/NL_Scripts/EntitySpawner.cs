@@ -4,11 +4,24 @@ using UnityEngine;
 
 public class EntitySpawner : MonoBehaviour
 {
-    [SerializeField] private EntityType_ScriptableObject[] scriptableObjects;
-    [SerializeField] private RoomHolder[] roomHolders;
+    [SerializeField] public EntityType_ScriptableObject[] scriptableObjects;
+    [SerializeField] public RoomHolder[] roomHolders;
+
     public List<string> roomActivated = new List<string>();
     public List<string> typeActivated = new List<string>();
-    private List<GameObject> activeObject = new List<GameObject>();
+    public List<GameObject> activeObject = new List<GameObject>();
+
+    // MG added a safe struct for ReportSystem only
+    [Serializable]
+    public struct ActiveEntity
+    {
+        public string roomName;
+        public string typeName;
+    }
+
+    // MG added a read-only list for ReportSystem
+    public List<ActiveEntity> activeEntities = new List<ActiveEntity>();
+
 
     void Start()
     {
@@ -22,99 +35,78 @@ public class EntitySpawner : MonoBehaviour
 
     public void AttemptDeleteEntity(string room, string type)
     {
-        foreach(string localRoom in roomActivated)
+        for (int i = 0; i < roomActivated.Count; i++)
         {
-            if(localRoom == room)
+            if (roomActivated[i] == room && typeActivated[i] == type)
             {
-                foreach(string localType in typeActivated)
-                {
-                    if(localType == type)
-                    { 
-                        Debug.Log("Entity Delete Function Ran");
-                        DeleteEntity(typeActivated.IndexOf(localType));
-                        return;
-                    }
-                    Debug.Log("Is Room; Is not Type");
-                }
+                Debug.Log("Entity Delete Function Ran");
+                DeleteEntity(i);
+                return;
             }
-            Debug.Log("Is not Room");
         }
+
+        Debug.Log("No matching entity found");
     }
 
-    private void DeleteEntity(int typeIndex)
+    private void DeleteEntity(int index)
     {
-        Destroy(activeObject[typeIndex]);
-        activeObject.Remove(activeObject[typeIndex]);
-        roomActivated.Remove(roomActivated[typeIndex]);
-        typeActivated.Remove(typeActivated[typeIndex]);
+        Destroy(activeObject[index]);
+
+        activeObject.RemoveAt(index);
+        roomActivated.RemoveAt(index);
+        typeActivated.RemoveAt(index);
+        activeEntities.RemoveAt(index); // MG added sync
+
         Debug.Log("Delete Successful");
     }
 
     public void SpawnExtraObject()
     {
-        
-        int randomRoom = UnityEngine.Random.Range(0,roomHolders.Length);
-        
-            
-                if (!CheckAlreadySpawned(roomHolders[randomRoom].roomName, "ExtraObject"))
-                { 
-                    Transform spawnLocation = roomHolders[randomRoom].RandomLocation();
+        int randomRoom = UnityEngine.Random.Range(0, roomHolders.Length);
 
-                    for(int i = 0; i < scriptableObjects.Length; i++)
-                    {
-                        if(scriptableObjects[i].typeName == "ExtraObject")
-                        {
-                            GameObject entityPrefab = scriptableObjects[i].RandomGameobject();
-                            GameObject spawnedEntity = Instantiate(entityPrefab, spawnLocation);
-                    
-                            activeObject.Add(spawnedEntity);
-                        }
-                        
-                    }
+        string roomName = roomHolders[randomRoom].roomName;
+        string typeName = "ExtraObject";
 
-                    //spawn object
+        if (CheckAlreadySpawned(roomName, typeName))
+        {
+            Debug.Log("Failed to spawn, trying again");
+            SpawnExtraObject();
+            return;
+        }
 
-                    roomActivated.Add(roomHolders[randomRoom].roomName);
-                    typeActivated.Add("ExtraObject");
-                    //add to spawned list
-                }
-                else
-                {
-                    SpawnExtraObject();
-                    Debug.Log("failed to spawn");
-                }
+        Transform spawnLocation = roomHolders[randomRoom].RandomLocation();
+        foreach (var obj in scriptableObjects)
+        {
+            if (obj.typeName == typeName)
+            {
+                GameObject prefab = obj.RandomGameobject();
+                GameObject spawned = Instantiate(prefab, spawnLocation);
+
+                activeObject.Add(spawned);
+            }
+        }
+
+        roomActivated.Add(roomName);
+        typeActivated.Add(typeName);
+
+        // MG add to ReportSystem-accessible list
+        activeEntities.Add(new ActiveEntity
+        {
+            roomName = roomName,
+            typeName = typeName
+        });
+
+        Debug.Log($"Spawned entity: Room = {roomName}, Type = {typeName}");
     }
 
     private bool CheckAlreadySpawned(string roomName, string entityType)
     {
-        foreach(string localRoom in roomActivated)
+        for (int i = 0; i < roomActivated.Count; i++)
         {
-            if(localRoom == roomName)
-            {
-                foreach(string localType in typeActivated)
-                {
-                    if(localType == entityType)
-                    { 
-                        Debug.Log("already spawned");
-                        return true;
-                    }
-                    
-                }
-            }
-            
+            if (roomActivated[i] == roomName && typeActivated[i] == entityType)
+                return true;
         }
         return false;
     }
-
-    private void SpawnAnomaly()
-    {
-        //call random spawn function
-        int randNum = UnityEngine.Random.Range(0,scriptableObjects.Length);
-        switch(randNum)
-        {
-            case 0: SpawnExtraObject(); break;
-
-
-        }
-    }
 }
+

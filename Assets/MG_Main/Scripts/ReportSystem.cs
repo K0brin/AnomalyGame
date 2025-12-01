@@ -7,8 +7,12 @@ public class ReportSystem : MonoBehaviour
 {
     [Header("UI Elements")]
     public Image stunImage;
-    public Button reportButton;        // This button appears after a report
+    public Button reportButton;       
     public TextMeshProUGUI noAnomalyText;
+
+    [Header("Panels")]
+    public GameObject logMenu;        
+    public GameObject reportSendingTextPanel;  
 
     [Header("Dropdowns")]
     public TMP_Dropdown roomDropdown;
@@ -16,65 +20,72 @@ public class ReportSystem : MonoBehaviour
 
     [Header("References")]
     public EntitySpawner spawner;
-    public GameObject logMenu;          // Assign the Log Menu panel here
 
     [Header("Settings")]
     public float displayTime = 3f;
-    public float reportDelay = 5f;
+    public float reportDelay = 1f;
 
     private Coroutine currentCoroutine;
+    private bool anomalyExistsFlag;
 
-    public void Awake()
+    void Awake()
     {
-        // Hide UI elements initially
         stunImage.gameObject.SetActive(false);
         noAnomalyText.gameObject.SetActive(false);
-        reportButton.gameObject.SetActive(false);
-        //reportButton.onClick.AddListener(OnReportButtonClicked);
-    }
+        reportSendingTextPanel.SetActive(false);
 
-    // Called when the player clicks the report button to start a new report
+        reportButton.onClick.AddListener(OnReportButtonClicked);
+    }
     public void OnReportButtonClicked()
     {
-        gameObject.SetActive(true);
-        StartCoroutine(DelayedReport());
-    }
-    private IEnumerator DelayedReport()
-    {
-        // Wait the specified time
-        yield return new WaitForSeconds(reportDelay);
+        PopulateDropdownsWithAllOptions();
 
-        // Now start the report
-        StartNewReport();
+        logMenu.SetActive(true);
     }
 
-    public void StartNewReport()
+    private void PopulateDropdownsWithAllOptions()
     {
-        // Reset UI state
-        stunImage.gameObject.SetActive(false);
-        noAnomalyText.gameObject.SetActive(false);
-        reportButton.gameObject.SetActive(false);
+        roomDropdown.ClearOptions();
+        anomalyDropdown.ClearOptions();
 
-        // Hide Log Menu and show ReportSending text
-        if (logMenu != null) logMenu.SetActive(false);
-        gameObject.SetActive(true);  // ReportSendingText panel
+        var rooms = new System.Collections.Generic.List<string>();
+        foreach (var room in spawner.roomHolders)
+            rooms.Add(room.roomName);
 
-        // Stop any running coroutine
+        var anomalies = new System.Collections.Generic.List<string>();
+        foreach (var s in spawner.scriptableObjects)
+            anomalies.Add(s.typeName);
+
+        roomDropdown.AddOptions(rooms);
+        anomalyDropdown.AddOptions(anomalies);
+
+        Debug.Log("Dropdowns populated with all rooms and anomaly types.");
+    }
+
+    public void OnSendReportButtonClicked()
+    {
         if (currentCoroutine != null)
             StopCoroutine(currentCoroutine);
 
-        currentCoroutine = StartCoroutine(ReportPending());
+        currentCoroutine = StartCoroutine(ReportSequence());
     }
 
-    private IEnumerator ReportPending()
+    private IEnumerator ReportSequence()
     {
-        // Get player's dropdown selections
-        string selectedRoom = roomDropdown.options[roomDropdown.value].text;
-        string selectedAnomaly = anomalyDropdown.options[anomalyDropdown.value].text;
+        reportSendingTextPanel.SetActive(true);
+        logMenu.SetActive(false);
+        reportButton.gameObject.SetActive(false);
 
-        bool anomalyExists = CheckAnomaly(selectedRoom, selectedAnomaly);
+        yield return new WaitForSeconds(reportDelay);
 
-        if (anomalyExists)
+        string selectedRoom = roomDropdown.options[roomDropdown.value].text.Trim();
+        string selectedAnomaly = anomalyDropdown.options[anomalyDropdown.value].text.Trim();
+
+        Debug.Log($"Player selected: Room = '{selectedRoom}', Anomaly = '{selectedAnomaly}'");
+
+        anomalyExistsFlag = CheckAnomaly(selectedRoom, selectedAnomaly);
+
+        if (anomalyExistsFlag)
         {
             stunImage.gameObject.SetActive(true);
             spawner.AttemptDeleteEntity(selectedRoom, selectedAnomaly);
@@ -89,25 +100,30 @@ public class ReportSystem : MonoBehaviour
             noAnomalyText.gameObject.SetActive(false);
         }
 
-        // Optionally show the ReportButton if you want to allow another report
+        reportSendingTextPanel.SetActive(false);
         reportButton.gameObject.SetActive(true);
-
-        // **Hide the ReportSendingText panel itself** so it no longer blocks the UI
-        gameObject.SetActive(false);
-
-        currentCoroutine = null;
     }
-
-
     private bool CheckAnomaly(string playerRoom, string playerAnomaly)
     {
-        for (int i = 0; i < spawner.roomActivated.Count; i++)
+        foreach (var e in spawner.activeEntities)
         {
-            if (spawner.roomActivated[i] == playerRoom && spawner.typeActivated[i] == playerAnomaly)
+            Debug.Log($"Checking entity: Room = '{e.roomName}', Type = '{e.typeName}'");
+
+            if (e.roomName.Equals(playerRoom, System.StringComparison.OrdinalIgnoreCase) &&
+                e.typeName.Equals(playerAnomaly, System.StringComparison.OrdinalIgnoreCase))
+            {
+                Debug.Log("Match found!");
                 return true;
+            }
         }
+
+        Debug.Log("No match found.");
         return false;
     }
 }
+
+
+
+
 
 

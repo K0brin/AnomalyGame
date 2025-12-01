@@ -1878,7 +1878,6 @@ GameObject:
   - component: {fileID: 623196845110549753}
   - component: {fileID: 259407374616750824}
   - component: {fileID: 4101309265090922108}
-  - component: {fileID: 5501317574807608038}
   m_Layer: 5
   m_Name: ReportSendingText
   m_TagString: Untagged
@@ -1899,11 +1898,11 @@ RectTransform:
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 2078697128263331601}
-  m_Father: {fileID: 8347112123860598515}
+  m_Father: {fileID: 5000051252983995162}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -196.05005, y: 100.70001}
+  m_AnchoredPosition: {x: -83.45691, y: 9.701996}
   m_SizeDelta: {x: 252.90002, y: 29.399994}
   m_Pivot: {x: 1, y: 0}
 --- !u!222 &259407374616750824
@@ -1944,24 +1943,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &5501317574807608038
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3509510603626013941}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b50493d765171b4b804236814750075, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stunImage: {fileID: 1432275458862198396}
-  reportButton: {fileID: 4702633882556422550}
-  noAnomalyText: {fileID: 1587984787511870538}
-  roomType: 1
-  anomalyType: 1
-  spawner: {fileID: 4234117627459331296, guid: 5bb1748690701c64aa20f8b19e3cc83d, type: 3}
 --- !u!1 &3722438026988245424
 GameObject:
   m_ObjectHideFlags: 0
@@ -2764,7 +2745,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5501317574807608038}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: ReportSystem, Assembly-CSharp
         m_MethodName: Awake
         m_Mode: 1
@@ -2817,7 +2798,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3784892663946145163}
-  - {fileID: 623196845110549753}
+  - {fileID: 5000051252983995162}
   - {fileID: 1124677815728328526}
   - {fileID: 696624387467367757}
   - {fileID: 4515808590160824347}
@@ -3951,6 +3932,65 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_AlphaFadeSpeed: 0.15
+--- !u!1 &7006674989445009636
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5000051252983995162}
+  - component: {fileID: 4859382688688036542}
+  m_Layer: 5
+  m_Name: ReportSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &5000051252983995162
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7006674989445009636}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 623196845110549753}
+  m_Father: {fileID: 8347112123860598515}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 225.72495, y: -110.399994}
+  m_SizeDelta: {x: 166.91402, y: 19.403992}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &4859382688688036542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7006674989445009636}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b50493d765171b4b804236814750075, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stunImage: {fileID: 1432275458862198396}
+  reportButton: {fileID: 4702633882556422550}
+  noAnomalyText: {fileID: 1587984787511870538}
+  reportSendingTextPanel: {fileID: 3509510603626013941}
+  logMenu: {fileID: 3847047103023564068}
+  roomDropdown: {fileID: 6297573724915606217}
+  anomalyDropdown: {fileID: 7493790953037870140}
+  spawner: {fileID: 4234117627459331296, guid: 5bb1748690701c64aa20f8b19e3cc83d, type: 3}
+  displayTime: 3
+  reportDelay: 5
 --- !u!1 &7009376302303093837
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,8 +6,8 @@ public class EntitySpawner : MonoBehaviour
 {
     [SerializeField] private EntityType_ScriptableObject[] scriptableObjects;
     [SerializeField] private RoomHolder[] roomHolders;
-    private List<string> roomActivated = new List<string>();
-    private List<string> typeActivated = new List<string>();
+    public List<string> roomActivated = new List<string>();
+    public List<string> typeActivated = new List<string>();
     private List<GameObject> activeObject = new List<GameObject>();
 
     void Start()

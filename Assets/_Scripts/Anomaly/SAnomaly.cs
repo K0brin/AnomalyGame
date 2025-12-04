@@ -3,6 +3,7 @@ using UnityEngine;
 public class SAnomaly : MonoBehaviour
 {
     [SerializeField] private AnomalySO anomalyData;  // Reference to the ScriptableObject
+    [SerializeField] private Transform movedTransform; //Location of object when 'moved'
     private bool isModified = false;  // Tracks if anomaly is not normal anymore
     private GameObject currentPrefab;
 
@@ -21,7 +22,78 @@ public class SAnomaly : MonoBehaviour
 
     public void ChangeState(string newState)
     {
-        if (newState == "Normal")
+
+        switch (newState)
+        {
+            case "Normal":
+            {
+                anomalyData.anomalyName = "Normal";
+                isModified = false;  // Allow for anomaly to change.
+
+                //Replace with norm prefab
+                ReplacePrefab(anomalyData.normalPrefab);
+            }
+            break;
+            case "Missing":
+            {
+                // Set the anomaly to "Missing"
+                anomalyData.anomalyName = "Missing";
+                isModified = true;
+
+                // Deactivate the prefab
+                if (currentPrefab != null)
+                {
+                    currentPrefab.SetActive(false);
+                }
+            }
+            break;
+
+            case "Moved":
+                {
+                    // Set the anomaly to "Moved"
+                    anomalyData.anomalyName = "Moved";
+                    isModified = true;
+
+                    // Re-Locate Object
+                    currentPrefab.transform.position = movedTransform.position;
+                    
+                }
+            break;
+
+            case "Replaced":
+                {
+                    // Set the anomaly to "Replaced"
+                    anomalyData.anomalyName = "Replaced";
+                    isModified = true;
+
+                    // Replace with the replaced prefab
+                    ReplacePrefab(anomalyData.replacedPrefab);
+                }
+            break;
+
+            default:
+            {
+                if (!isModified && newState != "Normal")
+                {
+                        // Prevent changes if the anomaly is not normal
+                        anomalyData.anomalyName = newState;
+                        isModified = true;
+
+                        // Replace with the replaced prefab
+                        ReplacePrefab(anomalyData.replacedPrefab);
+                }
+                else
+                {       
+                    Debug.LogWarning("Anomaly cannot change state again until it is reset to 'Normal'.");
+                }
+            }
+            break;
+        }
+
+
+        //old code made into switch
+
+        /*if (newState == "Normal")
         {
             anomalyData.anomalyName = "Normal";
             isModified = false;  // Allow for anomaly to change.
@@ -53,7 +125,7 @@ public class SAnomaly : MonoBehaviour
         else
         {
             Debug.LogWarning("Anomaly cannot change state again until it is reset to 'Normal'.");
-        }
+        }*/
     }
 
     private void ReplacePrefab(GameObject newPrefab)

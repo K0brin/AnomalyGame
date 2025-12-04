@@ -6,7 +6,8 @@ public class SAnomalySpawner : MonoBehaviour
     [SerializeField] private GameObject[] anomalyPrefabs;  
     [SerializeField] private float changeInterval = 5f;  // Seconds before anomaly change
     private float timer = 0f;
-    private List<SAnomaly> activeAnomalies = new List<SAnomaly>();  // List of current normal anomalies
+    private List<SAnomaly> normalAnomalies = new List<SAnomaly>();  // List of current normal anomalies
+    private List<SAnomaly> anomaliesNotNormal = new List<SAnomaly>();  // List of current non-normal anomalies
     private int anomaliesNotNormalCount = 0;  // Counter for anomalies not normal, have report system remove from count when submitting is successful
     public bool gameOver = false;  
 
@@ -31,7 +32,8 @@ public class SAnomalySpawner : MonoBehaviour
 
     private void InitializeAnomalies()
     {
-        activeAnomalies.Clear();  
+        normalAnomalies.Clear();  
+        anomaliesNotNormal.Clear();
         anomaliesNotNormalCount = 0; // Reset counter
 
         foreach (var prefab in anomalyPrefabs)
@@ -46,10 +48,11 @@ public class SAnomalySpawner : MonoBehaviour
                 // If the anomaly is normal add to norm list
                 if (anomalyComponent.GetAnomalyState() == "Normal")
                 {
-                    activeAnomalies.Add(anomalyComponent);
+                    normalAnomalies.Add(anomalyComponent);
                 }
                 else
                 {
+                    anomaliesNotNormal.Add(anomalyComponent);
                     anomaliesNotNormalCount++; 
                 }
 
@@ -65,15 +68,15 @@ public class SAnomalySpawner : MonoBehaviour
 
     private void ChangeRandomAnomalyState()
     {
-        if (activeAnomalies.Count == 0)
+        if (normalAnomalies.Count == 0)
         {
             Debug.LogWarning("No anomalies in the 'Normal' state to change.");
             return;
         }
 
         // Pick a random normal anomaly from norm list
-        int randomIndex = Random.Range(0, activeAnomalies.Count);
-        SAnomaly selectedAnomaly = activeAnomalies[randomIndex];
+        int randomIndex = Random.Range(0, normalAnomalies.Count);
+        SAnomaly selectedAnomaly = normalAnomalies[randomIndex];
 
         // Randomly set state of anomaly
         string[] possibleStates = new string[] { "Missing", "Moved", "Replaced", "Extra" };
@@ -82,15 +85,48 @@ public class SAnomalySpawner : MonoBehaviour
         //change attempt
         Debug.Log($"[AnomalySpawner] Trying to change anomaly {selectedAnomaly.name} from '{selectedAnomaly.GetAnomalyState()}' to '{newState}'.");
 
-        selectedAnomaly.ChangeState("Extra");
+        selectedAnomaly.ChangeState(newState);
 
         //change complete
         Debug.Log($"[AnomalySpawner] Anomaly {selectedAnomaly.name} state changed to '{newState}'.");
 
         if (selectedAnomaly.GetAnomalyState() != "Normal")
         {
-            activeAnomalies.Remove(selectedAnomaly);
+            normalAnomalies.Remove(selectedAnomaly);
+            anomaliesNotNormal.Add(selectedAnomaly);
             anomaliesNotNormalCount++;  // Increase the count of anomalies that aren't "Normal"
+        }
+    }
+
+
+    //called by report script
+    //AnomalyState: "Missing", "Moved", "Replaced", "Extra"
+    //RoomName: Garage, LivingRoom, Backyard, Kitchen
+    private void EraseAnomaly(string AnomalyState, string RoomName)
+    {
+        if (anomaliesNotNormal.Count == 0)
+        {
+            Debug.LogWarning("No active anomalies to erase.");
+            return;
+        }
+
+        //check each active anomaly
+        foreach(var activeAnomaly in anomaliesNotNormal)
+        {
+            Debug.Log(activeAnomaly.GetAnomalyRoom());
+            //if state and name match
+            if(activeAnomaly.GetAnomalyState() == AnomalyState && activeAnomaly.GetAnomalyRoom() == RoomName)
+            {
+                //revert anomaly back to normal
+                activeAnomaly.RevertState();
+                
+                //remove from active, add to normal
+                anomaliesNotNormal.Remove(activeAnomaly);
+                normalAnomalies.Add(activeAnomaly);
+                anomaliesNotNormalCount++; //reduce amount of not normal anomalies
+                Debug.Log($"Anomaly of Type{AnomalyState} and In Room{RoomName} Successfully Reverted");
+                break;
+            }
         }
     }
 

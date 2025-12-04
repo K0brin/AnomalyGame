@@ -1,3 +1,5 @@
+using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SAnomaly : MonoBehaviour
@@ -6,6 +8,7 @@ public class SAnomaly : MonoBehaviour
     [SerializeField] private Transform movedTransform; //Location of object when 'moved'
     private bool isModified = false;  // Tracks if anomaly is not normal anymore
     private GameObject currentPrefab;
+    private GameObject extraPrefab;
 
     private void Start()
     {
@@ -31,7 +34,7 @@ public class SAnomaly : MonoBehaviour
                 isModified = false;  // Allow for anomaly to change.
 
                 //Replace with norm prefab
-                ReplacePrefab(anomalyData.normalPrefab, false);
+                ReplacePrefab(anomalyData.normalPrefab);
             }
             break;
             case "Missing":
@@ -67,7 +70,7 @@ public class SAnomaly : MonoBehaviour
                     isModified = true;
 
                     // Replace with the replaced prefab
-                    ReplacePrefab(anomalyData.replacedPrefab, false);
+                    ReplacePrefab(anomalyData.replacedPrefab);
                 }
             break;
 
@@ -77,7 +80,7 @@ public class SAnomaly : MonoBehaviour
                     isModified = true;
 
                     //add new object without deleting old
-                    ReplacePrefab(anomalyData.normalPrefab, true);
+                    ExtraPrefab(anomalyData.extraPrefab);
                 }
             break;
 
@@ -90,7 +93,7 @@ public class SAnomaly : MonoBehaviour
                         isModified = true;
 
                         // Replace with the replaced prefab
-                        ReplacePrefab(anomalyData.replacedPrefab, false);
+                        ReplacePrefab(anomalyData.replacedPrefab);
                 }
                 else
                 {       
@@ -138,9 +141,73 @@ public class SAnomaly : MonoBehaviour
         }*/
     }
 
-    private void ReplacePrefab(GameObject newPrefab, bool isExtra)
+    public void RevertState()
     {
-        if (currentPrefab != null && !isExtra)
+        String currentState = anomalyData.anomalyName;
+
+        switch (currentState)
+        {
+            case "Normal":
+            {
+                Debug.Log("ERROR: state shows normal in revert function");
+            }
+            break;
+            case "Missing":
+            {
+                // Re-Activate the prefab
+                if (currentPrefab != null)
+                {
+                    currentPrefab.SetActive(true);
+                }
+            }
+            break;
+
+            case "Moved":
+                {
+                    // Re-Locate Object to original transform
+                    currentPrefab.transform.position = this.gameObject.transform.parent.transform.position;
+                }
+            break;
+
+            case "Replaced":
+                {
+                    // Replace with the normal prefab
+                    ReplacePrefab(anomalyData.normalPrefab);
+                }
+            break;
+
+            case "Extra":
+                {
+                    //delete new object, leave old
+                    Destroy(extraPrefab);
+                }
+            break;
+
+            default:
+            {
+                if (!isModified && currentState != "Normal")
+                {
+
+                        // Replace with the replaced prefab
+                        ReplacePrefab(anomalyData.replacedPrefab);
+                }
+                else
+                {       
+                    Debug.LogWarning("Anomaly cannot change state again until it is reset to 'Normal'.");
+                }
+            }
+            break;
+        }
+
+        //Set the Anomaly to "Normal"
+        anomalyData.anomalyName = "Normal";
+        isModified = false;
+
+    }
+
+    private void ReplacePrefab(GameObject newPrefab)
+    {
+        if (currentPrefab != null)
         {
             // remove previous prefab
             Destroy(currentPrefab);
@@ -152,10 +219,6 @@ public class SAnomaly : MonoBehaviour
             currentPrefab = Instantiate(newPrefab, transform.position, transform.rotation);
             currentPrefab.transform.SetParent(transform.parent); //keep in same room
 
-            if (isExtra)
-            {
-                currentPrefab.transform.position = movedTransform.position;
-            }
         }
         else
         {
@@ -163,9 +226,20 @@ public class SAnomaly : MonoBehaviour
         }
     }
 
+    private void ExtraPrefab(GameObject newPrefab)
+    {
+        extraPrefab = Instantiate(newPrefab, movedTransform.position, transform.rotation);
+        extraPrefab.transform.SetParent(transform.parent); //keep in same room
+    }
+
     public string GetAnomalyState()
     {
         return anomalyData != null ? anomalyData.anomalyName : "Unknown";
+    }
+
+    public string GetAnomalyRoom()
+    {
+        return anomalyData != null ? this.transform.parent.name : "Unknown";
     }
 
     public void ResetToNormal()

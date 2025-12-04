@@ -31,7 +31,7 @@ public class SAnomaly : MonoBehaviour
                 isModified = false;  // Allow for anomaly to change.
 
                 //Replace with norm prefab
-                ReplacePrefab(anomalyData.normalPrefab);
+                ReplacePrefab(anomalyData.normalPrefab, false);
             }
             break;
             case "Missing":
@@ -67,7 +67,17 @@ public class SAnomaly : MonoBehaviour
                     isModified = true;
 
                     // Replace with the replaced prefab
-                    ReplacePrefab(anomalyData.replacedPrefab);
+                    ReplacePrefab(anomalyData.replacedPrefab, false);
+                }
+            break;
+
+            case "Extra":
+                {
+                    anomalyData.anomalyName = "Extra";
+                    isModified = true;
+
+                    //add new object without deleting old
+                    ReplacePrefab(anomalyData.normalPrefab, true);
                 }
             break;
 
@@ -80,7 +90,7 @@ public class SAnomaly : MonoBehaviour
                         isModified = true;
 
                         // Replace with the replaced prefab
-                        ReplacePrefab(anomalyData.replacedPrefab);
+                        ReplacePrefab(anomalyData.replacedPrefab, false);
                 }
                 else
                 {       
@@ -128,9 +138,9 @@ public class SAnomaly : MonoBehaviour
         }*/
     }
 
-    private void ReplacePrefab(GameObject newPrefab)
+    private void ReplacePrefab(GameObject newPrefab, bool isExtra)
     {
-        if (currentPrefab != null)
+        if (currentPrefab != null && !isExtra)
         {
             // remove previous prefab
             Destroy(currentPrefab);
@@ -141,6 +151,11 @@ public class SAnomaly : MonoBehaviour
             // Instantiate the new prefab 
             currentPrefab = Instantiate(newPrefab, transform.position, transform.rotation);
             currentPrefab.transform.SetParent(transform.parent); //keep in same room
+
+            if (isExtra)
+            {
+                currentPrefab.transform.position = movedTransform.position;
+            }
         }
         else
         {

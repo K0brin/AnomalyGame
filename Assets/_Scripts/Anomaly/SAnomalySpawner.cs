@@ -76,13 +76,13 @@ public class SAnomalySpawner : MonoBehaviour
         SAnomaly selectedAnomaly = activeAnomalies[randomIndex];
 
         // Randomly set state of anomaly
-        string[] possibleStates = new string[] { "Missing", "Moved", "Replaced" };
+        string[] possibleStates = new string[] { "Missing", "Moved", "Replaced", "Extra" };
         string newState = possibleStates[Random.Range(0, possibleStates.Length)];
 
         //change attempt
         Debug.Log($"[AnomalySpawner] Trying to change anomaly {selectedAnomaly.name} from '{selectedAnomaly.GetAnomalyState()}' to '{newState}'.");
 
-        selectedAnomaly.ChangeState(newState);
+        selectedAnomaly.ChangeState("Extra");
 
         //change complete
         Debug.Log($"[AnomalySpawner] Anomaly {selectedAnomaly.name} state changed to '{newState}'.");

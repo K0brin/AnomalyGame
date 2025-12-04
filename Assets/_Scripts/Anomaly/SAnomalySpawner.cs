@@ -1,10 +1,15 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
+using Unity.VisualScripting;
+using TMPro;
 
 public class SAnomalySpawner : MonoBehaviour
 {
     [SerializeField] private GameObject[] anomalyPrefabs;  
     [SerializeField] private float changeInterval = 5f;  // Seconds before anomaly change
+    [SerializeField] private GameObject warningUI;
+    private float typeTime = 0.1f;
     private float timer = 0f;
     private List<SAnomaly> normalAnomalies = new List<SAnomaly>();  // List of current normal anomalies
     private List<SAnomaly> anomaliesNotNormal = new List<SAnomaly>();  // List of current non-normal anomalies
@@ -13,6 +18,7 @@ public class SAnomalySpawner : MonoBehaviour
 
     void Start()
     {
+        warningUI.SetActive(false);
         InitializeAnomalies();
     }
 
@@ -24,10 +30,9 @@ public class SAnomalySpawner : MonoBehaviour
         {
             timer = 0f;  // Reset timer
             ChangeRandomAnomalyState();
+            CheckGameOverCondition();
         }
 
-        // move out of update
-        CheckGameOverCondition();
     }
 
     private void InitializeAnomalies()
@@ -132,6 +137,7 @@ public class SAnomalySpawner : MonoBehaviour
 
     private void CheckGameOverCondition()
     {
+        Debug.Log(anomaliesNotNormalCount);
         if (anomaliesNotNormalCount == 3)
         {
             if (!gameOver)
@@ -139,6 +145,43 @@ public class SAnomalySpawner : MonoBehaviour
                 gameOver = true;
                 Debug.Log("Game Over! Anomalies took over!");
             }
+        }
+        else if(anomaliesNotNormalCount == 2) //should be 2
+        {
+            warningUI.SetActive(true);
+            StartCoroutine(PlayWarning());
+        }
+    }
+
+    private IEnumerator PlayWarning()
+    {
+        string inputText = "THIS IS AN EMERGENCY WARNING!";
+        StartCoroutine(TypeWriter(inputText));
+        yield return new WaitForSeconds(typeTime * inputText.Length + 1);
+        inputText = "WE ARE RECIEVING READINGS OF MULTIPLE ACTIVE ANOMALIES IN YOUR AREA";
+        StartCoroutine(TypeWriter(inputText));
+        yield return new WaitForSeconds(typeTime * inputText.Length + 1);
+        inputText = "PLEASE LOCATE THE ANOMALIES AND SEND REPORTS ASAP";
+        StartCoroutine(TypeWriter(inputText));
+        yield return new WaitForSeconds(typeTime * inputText.Length + 1);
+        warningUI.SetActive(false);
+    }
+
+    private IEnumerator TypeWriter(string inputText)
+    {
+        TextMeshProUGUI warningText = warningUI.GetComponentInChildren<TextMeshProUGUI>();
+        warningText.text = "";
+        string leadingChar = "";
+
+        foreach(char a in inputText)
+        {
+            if (warningText.text.Length > 0)
+			{
+				warningText.text = warningText.text.Substring(0, warningText.text.Length - leadingChar.Length);
+			}
+			warningText.text += a;
+			warningText.text += leadingChar;
+			yield return new WaitForSeconds(typeTime);
         }
     }
 

@@ -9,6 +9,8 @@ public class SGameInput : MonoBehaviour
     //event for camera switch
     public event EventHandler<Vector2> OnCameraSwitchInput;
 
+    [SerializeField] private SPauseMenu pauseMenu;
+
     private InputSystem_Actions playerInputActions;
 
     private void Awake()
@@ -30,12 +32,14 @@ public class SGameInput : MonoBehaviour
         playerInputActions.Enable(); 
 
         playerInputActions.Player.SwitchCamera.performed += SwitchCameraInput;
+        playerInputActions.Player.Pause.performed += PauseGame;
     }
 
     private void OnDisable()
     {
         playerInputActions.Disable();  
         playerInputActions.Player.SwitchCamera.performed -= SwitchCameraInput;
+        playerInputActions.Player.Pause.performed -= PauseGame;
     }
 
     private void SwitchCameraInput(InputAction.CallbackContext context)
@@ -43,6 +47,11 @@ public class SGameInput : MonoBehaviour
         Vector2 input = context.ReadValue<Vector2>();
         
         OnCameraSwitchInput?.Invoke(this, input);
+    }
+
+     private void PauseGame(InputAction.CallbackContext context)
+    {
+        pauseMenu.TogglePause();
     }
 }
 

@@ -19,4 +19,5 @@ public class SPlayer : MonoBehaviour
         //forward the camera switch input to the SCameraManager
         SCameraManager.Instance.HandleCameraSwitch(input);
     }
+
 }

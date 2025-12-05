@@ -144,13 +144,17 @@ public class SAnomaly : MonoBehaviour
     public void RevertState()
     {
         //String currentState = anomalyData.anomalyName;
-        
+
         if (isModified)
         {
             anomalyData.anomalyName = "Normal";
             isModified = false;
 
             ReplacePrefab(anomalyData.normalPrefab);
+        }
+        else
+        {
+            Debug.Log("object is not modified");
         }
 
         /*switch (currentState)

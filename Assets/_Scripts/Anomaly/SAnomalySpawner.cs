@@ -9,6 +9,7 @@ public class SAnomalySpawner : MonoBehaviour
     [SerializeField] private GameObject[] anomalyPrefabs;  
     [SerializeField] private float changeInterval = 5f;  // Seconds before anomaly change
     [SerializeField] private GameObject warningUI;
+    [SerializeField] AudioSource warningAudio;
     private float typeTime = 0.1f;
     private float timer = 0f;
     private List<SAnomaly> normalAnomalies = new List<SAnomaly>();  // List of current normal anomalies
@@ -146,7 +147,7 @@ public class SAnomalySpawner : MonoBehaviour
                 Debug.Log("Game Over! Anomalies took over!");
             }
         }
-        else if(anomaliesNotNormalCount == 2) //should be 2
+        else if(anomaliesNotNormalCount == 1) //should be 2
         {
             warningUI.SetActive(true);
             StartCoroutine(PlayWarning());
@@ -155,15 +156,18 @@ public class SAnomalySpawner : MonoBehaviour
 
     private IEnumerator PlayWarning()
     {
+        warningAudio.Play();
         string inputText = "THIS IS AN EMERGENCY WARNING!";
         StartCoroutine(TypeWriter(inputText));
-        yield return new WaitForSeconds(typeTime * inputText.Length + 1);
+        yield return new WaitForSeconds(typeTime * inputText.Length + 2);
+        warningAudio.Play();
         inputText = "WE ARE RECIEVING READINGS OF MULTIPLE ACTIVE ANOMALIES IN YOUR AREA";
         StartCoroutine(TypeWriter(inputText));
-        yield return new WaitForSeconds(typeTime * inputText.Length + 1);
+        yield return new WaitForSeconds(typeTime * inputText.Length + 2);
+        warningAudio.Play();
         inputText = "PLEASE LOCATE THE ANOMALIES AND SEND REPORTS ASAP";
         StartCoroutine(TypeWriter(inputText));
-        yield return new WaitForSeconds(typeTime * inputText.Length + 1);
+        yield return new WaitForSeconds(typeTime * inputText.Length + 2);
         warningUI.SetActive(false);
     }
 
@@ -183,6 +187,7 @@ public class SAnomalySpawner : MonoBehaviour
 			warningText.text += leadingChar;
 			yield return new WaitForSeconds(typeTime);
         }
+        warningAudio.Stop();
     }
 
     public void ResetGame()

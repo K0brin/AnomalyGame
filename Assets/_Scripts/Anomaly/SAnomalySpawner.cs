@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 using TMPro;
 using UnityEditor;
 using UnityEngine.LightTransport;
+using NUnit.Framework.Internal;
 
 public class SAnomalySpawner : MonoBehaviour
 {
@@ -101,6 +102,7 @@ public class SAnomalySpawner : MonoBehaviour
 
 
         bool canSpawn = true;
+        canSpawn = true;
         foreach( var anomaly in anomaliesNotNormal)
         {
             if (anomaly.GetAnomalyRoom() == selectedAnomaly.GetAnomalyRoom() && anomaly.GetAnomalyState() == newState)
@@ -133,20 +135,21 @@ public class SAnomalySpawner : MonoBehaviour
         if (canSpawn)
         {
             selectedAnomaly.ChangeState(newState);
+            //change complete
+            Debug.Log($"[AnomalySpawner] Anomaly {selectedAnomaly.name} state changed to '{newState}'.");
+
+            if (selectedAnomaly.GetAnomalyState() != "Normal")
+            {
+                normalAnomalies.Remove(selectedAnomaly);
+                anomaliesNotNormal.Add(selectedAnomaly);
+                anomaliesNotNormalCount++;  // Increase the count of anomalies that aren't "Normal"
+            }
+
         }
         else
         {
             ChangeRandomAnomalyState();
-        }
-
-        //change complete
-        Debug.Log($"[AnomalySpawner] Anomaly {selectedAnomaly.name} state changed to '{newState}'.");
-
-        if (selectedAnomaly.GetAnomalyState() != "Normal")
-        {
-            normalAnomalies.Remove(selectedAnomaly);
-            anomaliesNotNormal.Add(selectedAnomaly);
-            anomaliesNotNormalCount++;  // Increase the count of anomalies that aren't "Normal"
+            return;
         }
     }
 

@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using System.Collections;
 using Unity.VisualScripting;
 using TMPro;
+using UnityEditor;
+using UnityEngine.LightTransport;
 
 public class SAnomalySpawner : MonoBehaviour
 {
     [SerializeField] private GameObject[] anomalyPrefabs;  
-    [SerializeField] private float changeInterval = 5f;  // Seconds before anomaly change
+    [SerializeField] private float minChangeInterval = 5;
+    [SerializeField] private float maxChangeInterval = 10;
+    private float changeInterval;  // Seconds before anomaly change
     [SerializeField] private GameObject warningUI;
     [SerializeField] AudioSource warningAudio;
     private float typeTime = 0.1f;
@@ -16,11 +20,14 @@ public class SAnomalySpawner : MonoBehaviour
     private List<SAnomaly> anomaliesNotNormal = new List<SAnomaly>();  // List of current non-normal anomalies
     private int anomaliesNotNormalCount = 0;  // Counter for anomalies not normal, have report system remove from count when submitting is successful
     public bool gameOver = false;  
+    SCameraManager cameraManager;
 
     void Start()
     {
+        cameraManager = GameObject.FindGameObjectWithTag("CameraManager").GetComponent<SCameraManager>();
         warningUI.SetActive(false);
         InitializeAnomalies();
+        RandomizeChangeInterval();
     }
 
     void Update()
@@ -32,6 +39,7 @@ public class SAnomalySpawner : MonoBehaviour
             timer = 0f;  // Reset timer
             ChangeRandomAnomalyState();
             CheckGameOverCondition();
+            RandomizeChangeInterval();
         }
 
     }
@@ -91,7 +99,45 @@ public class SAnomalySpawner : MonoBehaviour
         //change attempt
         Debug.Log($"[AnomalySpawner] Trying to change anomaly {selectedAnomaly.name} from '{selectedAnomaly.GetAnomalyState()}' to '{newState}'.");
 
-        selectedAnomaly.ChangeState(newState);
+
+        bool canSpawn = true;
+        foreach( var anomaly in anomaliesNotNormal)
+        {
+            if (anomaly.GetAnomalyRoom() == selectedAnomaly.GetAnomalyRoom() && anomaly.GetAnomalyState() == newState)
+            {
+                //if same type in same room
+                canSpawn = false;
+                break;
+            }
+        }
+
+        //don't spawn anomaly when player is looking
+        string activeCamera = "Empty";
+        switch (cameraManager.GetCurrentCam())
+        {
+            case 0: activeCamera = "LivingRoom";  break; //living room
+            case 1: activeCamera = "Garage";    break; //garage
+            case 2: activeCamera = "Kitchen";    break; //kitchen
+            case 3: activeCamera = "Backyard";    break; //backyard
+        }
+
+        if(activeCamera == selectedAnomaly.GetAnomalyRoom())
+        {
+            canSpawn = false;
+        }
+        else if(activeCamera == "Empty")
+        {
+            Debug.Log("Value failed to change");
+        }
+
+        if (canSpawn)
+        {
+            selectedAnomaly.ChangeState(newState);
+        }
+        else
+        {
+            ChangeRandomAnomalyState();
+        }
 
         //change complete
         Debug.Log($"[AnomalySpawner] Anomaly {selectedAnomaly.name} state changed to '{newState}'.");
@@ -147,7 +193,7 @@ public class SAnomalySpawner : MonoBehaviour
                 Debug.Log("Game Over! Anomalies took over!");
             }
         }
-        else if(anomaliesNotNormalCount == 1) //should be 2
+        else if(anomaliesNotNormalCount == 2) //should be 2
         {
             warningUI.SetActive(true);
             StartCoroutine(PlayWarning());
@@ -188,6 +234,11 @@ public class SAnomalySpawner : MonoBehaviour
 			yield return new WaitForSeconds(typeTime);
         }
         warningAudio.Stop();
+    }
+
+    private void RandomizeChangeInterval()
+    {
+        changeInterval = Random.Range(minChangeInterval, maxChangeInterval);
     }
 
     public void ResetGame()

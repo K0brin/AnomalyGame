@@ -244,6 +244,11 @@ public class SAnomaly : MonoBehaviour
         return anomalyData != null ? this.transform.parent.name : "Unknown";
     }
 
+    public bool GetIsModified()
+    {
+        return isModified;
+    }
+
     public void ResetToNormal()
     {
         ChangeState("Normal");

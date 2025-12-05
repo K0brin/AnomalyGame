@@ -58,7 +58,7 @@ public class SAnomaly : MonoBehaviour
                     isModified = true;
 
                     // Re-Locate Object
-                    currentPrefab.transform.position = movedTransform.position;
+                    ReplacePrefab(anomalyData.movedPrefab);
                     
                 }
             break;
@@ -80,7 +80,7 @@ public class SAnomaly : MonoBehaviour
                     isModified = true;
 
                     //add new object without deleting old
-                    ExtraPrefab(anomalyData.extraPrefab);
+                    ReplacePrefab(anomalyData.extraPrefab);
                 }
             break;
 
@@ -143,9 +143,21 @@ public class SAnomaly : MonoBehaviour
 
     public void RevertState()
     {
-        String currentState = anomalyData.anomalyName;
+        //String currentState = anomalyData.anomalyName;
 
-        switch (currentState)
+        if (isModified)
+        {
+            anomalyData.anomalyName = "Normal";
+            isModified = false;
+
+            ReplacePrefab(anomalyData.normalPrefab);
+        }
+        else
+        {
+            Debug.Log("object is not modified");
+        }
+
+        /*switch (currentState)
         {
             case "Normal":
             {
@@ -178,8 +190,7 @@ public class SAnomaly : MonoBehaviour
 
             case "Extra":
                 {
-                    //delete new object, leave old
-                    Destroy(extraPrefab);
+                    
                 }
             break;
 
@@ -197,11 +208,8 @@ public class SAnomaly : MonoBehaviour
                 }
             }
             break;
-        }
+        }*/
 
-        //Set the Anomaly to "Normal"
-        anomalyData.anomalyName = "Normal";
-        isModified = false;
 
     }
 
@@ -226,12 +234,6 @@ public class SAnomaly : MonoBehaviour
         }
     }
 
-    private void ExtraPrefab(GameObject newPrefab)
-    {
-        extraPrefab = Instantiate(newPrefab, movedTransform.position, transform.rotation);
-        extraPrefab.transform.SetParent(transform.parent); //keep in same room
-    }
-
     public string GetAnomalyState()
     {
         return anomalyData != null ? anomalyData.anomalyName : "Unknown";
@@ -240,6 +242,11 @@ public class SAnomaly : MonoBehaviour
     public string GetAnomalyRoom()
     {
         return anomalyData != null ? this.transform.parent.name : "Unknown";
+    }
+
+    public bool GetIsModified()
+    {
+        return isModified;
     }
 
     public void ResetToNormal()

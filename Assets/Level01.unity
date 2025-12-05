@@ -1603,7 +1603,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   anomalyPrefabs:
   - {fileID: 9032337873351927452}
-  changeInterval: 5
+  changeInterval: 10
   warningUI: {fileID: 959407103}
   gameOver: 0
 --- !u!4 &1126151553

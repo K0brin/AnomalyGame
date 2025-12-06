@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb82a154946733e4ca16716b40423e0c, type: 3}
+  m_Name: TV
+  m_EditorClassIdentifier: 
+  anomalyName: Extra
+  normalPrefab: {fileID: 6066305073067949037, guid: 3b829a0181fb01e4aa45d3966c286ab1, type: 3}
+  replacedPrefab: {fileID: 1977156500276492347, guid: bc47bf44b792b5f4da1ce7536e1ac351, type: 3}
+  extraPrefab: {fileID: 6415628436120117032, guid: 6a5b3628a85b2cf4bbf6164062eeab70, type: 3}
+  movedPrefab: {fileID: 7427758294533810193, guid: 4b91cd0252b847e4da885313b3fe600f, type: 3}
+  roomName: 

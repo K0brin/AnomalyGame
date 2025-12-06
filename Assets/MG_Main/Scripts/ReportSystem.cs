@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -7,19 +8,19 @@ public class ReportSystem : MonoBehaviour
 {
     [Header("UI Elements")]
     public Image stunImage;
-    public Button reportButton;       
+    public Button reportButton;
     public TextMeshProUGUI noAnomalyText;
 
     [Header("Panels")]
-    public GameObject logMenu;        
-    public GameObject reportSendingTextPanel;  
+    public GameObject logMenu;
+    public GameObject reportSendingTextPanel;
 
     [Header("Dropdowns")]
     public TMP_Dropdown roomDropdown;
     public TMP_Dropdown anomalyDropdown;
 
     [Header("References")]
-    public EntitySpawner spawner;
+    public SAnomalySpawner spawner;
 
     [Header("Settings")]
     public float displayTime = 3f;
@@ -36,30 +37,41 @@ public class ReportSystem : MonoBehaviour
 
         reportButton.onClick.AddListener(OnReportButtonClicked);
     }
+
     public void OnReportButtonClicked()
     {
         PopulateDropdownsWithAllOptions();
-
         logMenu.SetActive(true);
     }
 
     private void PopulateDropdownsWithAllOptions()
     {
+        Debug.Log("Report Button clicked");
         roomDropdown.ClearOptions();
         anomalyDropdown.ClearOptions();
 
-        var rooms = new System.Collections.Generic.List<string>();
-        foreach (var room in spawner.roomHolders)
-            rooms.Add(room.roomName);
+        var rooms = new List<string>();
+        var anomalies = new List<string> { "Missing", "Moved", "Replaced", "Extra" };
 
-        var anomalies = new System.Collections.Generic.List<string>();
-        foreach (var s in spawner.scriptableObjects)
-            anomalies.Add(s.typeName);
+        
+        HashSet<string> roomSet = new HashSet<string>();
+        foreach (var anomaly in spawner.normalAnomalies)
+        {
+            roomSet.Add(anomaly.GetAnomalyRoom());
+            Debug.Log($"Normal anomaly found in room: {anomaly.GetAnomalyRoom()}");
+        }
+        foreach (var anomaly in spawner.anomaliesNotNormal)
+        {
+            roomSet.Add(anomaly.GetAnomalyRoom());
+            Debug.Log($"Active anomaly found in room: {anomaly.GetAnomalyRoom()}");
+        }
+
+        rooms.AddRange(roomSet);
 
         roomDropdown.AddOptions(rooms);
         anomalyDropdown.AddOptions(anomalies);
 
-        Debug.Log("Dropdowns populated with all rooms and anomaly types.");
+        Debug.Log($"Dropdowns populated. Rooms: {string.Join(", ", rooms)} | Anomalies: {string.Join(", ", anomalies)}");
     }
 
     public void OnSendReportButtonClicked()
@@ -72,6 +84,7 @@ public class ReportSystem : MonoBehaviour
 
     private IEnumerator ReportSequence()
     {
+        Debug.Log("Report Sequence commencing");
         reportSendingTextPanel.SetActive(true);
         logMenu.SetActive(false);
         reportButton.gameObject.SetActive(false);
@@ -87,30 +100,36 @@ public class ReportSystem : MonoBehaviour
 
         if (anomalyExistsFlag)
         {
+            Debug.Log("Anomaly exists! Triggering stun and removing anomaly.");
             stunImage.gameObject.SetActive(true);
-            spawner.AttemptDeleteEntity(selectedRoom, selectedAnomaly);
+            spawner.EraseAnomaly(selectedAnomaly, selectedRoom);
+            Debug.Log($"EraseAnomaly called for Room = '{selectedRoom}', Anomaly = '{selectedAnomaly}'");
             yield return new WaitForSeconds(displayTime);
             stunImage.gameObject.SetActive(false);
+            Debug.Log("Stun display completed.");
         }
         else
         {
+            Debug.Log("No anomaly found. Displaying warning message.");
             noAnomalyText.text = $"No anomaly of type {selectedAnomaly} found in {selectedRoom}";
             noAnomalyText.gameObject.SetActive(true);
             yield return new WaitForSeconds(displayTime);
             noAnomalyText.gameObject.SetActive(false);
+            Debug.Log("No anomaly message display completed.");
         }
 
         reportSendingTextPanel.SetActive(false);
         reportButton.gameObject.SetActive(true);
     }
+
     private bool CheckAnomaly(string playerRoom, string playerAnomaly)
     {
-        foreach (var e in spawner.activeEntities)
+        foreach (var e in spawner.anomaliesNotNormal)
         {
-            Debug.Log($"Checking entity: Room = '{e.roomName}', Type = '{e.typeName}'");
+            Debug.Log($"Checking anomaly: Room = '{e.GetAnomalyRoom()}', Type = '{e.GetAnomalyState()}'");
 
-            if (e.roomName.Equals(playerRoom, System.StringComparison.OrdinalIgnoreCase) &&
-                e.typeName.Equals(playerAnomaly, System.StringComparison.OrdinalIgnoreCase))
+            if (e.GetAnomalyRoom().Equals(playerRoom, System.StringComparison.OrdinalIgnoreCase) &&
+                e.GetAnomalyState().Equals(playerAnomaly, System.StringComparison.OrdinalIgnoreCase))
             {
                 Debug.Log("Match found!");
                 return true;
@@ -121,6 +140,7 @@ public class ReportSystem : MonoBehaviour
         return false;
     }
 }
+
 
 
 

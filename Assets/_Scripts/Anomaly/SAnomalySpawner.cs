@@ -17,8 +17,11 @@ public class SAnomalySpawner : MonoBehaviour
     [SerializeField] AudioSource warningAudio;
     private float typeTime = 0.1f;
     private float timer = 0f;
-    private List<SAnomaly> normalAnomalies = new List<SAnomaly>();  // List of current normal anomalies
-    private List<SAnomaly> anomaliesNotNormal = new List<SAnomaly>();  // List of current non-normal anomalies
+
+    //MG changed protection levels so ReportSystem can access it
+    public List<SAnomaly> normalAnomalies = new List<SAnomaly>();  // List of current normal anomalies
+    public List<SAnomaly> anomaliesNotNormal = new List<SAnomaly>();  // List of current non-normal anomalies
+
     private int anomaliesNotNormalCount = 0;  // Counter for anomalies not normal, have report system remove from count when submitting is successful
     public bool gameOver = false;  
     SCameraManager cameraManager;
@@ -159,7 +162,8 @@ public class SAnomalySpawner : MonoBehaviour
     //called by report script
     //AnomalyState: "Missing", "Moved", "Replaced", "Extra"
     //RoomName: Garage, LivingRoom, Backyard, Kitchen
-    private void EraseAnomaly(string AnomalyState, string RoomName)
+    //MG changed EraseAnomaly's protection level so that ReportSystem can access it
+    public void EraseAnomaly(string AnomalyState, string RoomName)
     {
         if (anomaliesNotNormal.Count == 0)
         {

@@ -44,9 +44,12 @@ public class SGameInput : MonoBehaviour
 
     private void SwitchCameraInput(InputAction.CallbackContext context)
     {
-        Vector2 input = context.ReadValue<Vector2>();
-        
-        OnCameraSwitchInput?.Invoke(this, input);
+        if(!SPauseMenu.GameIsPaused)
+        {
+            Vector2 input = context.ReadValue<Vector2>();
+            
+            OnCameraSwitchInput?.Invoke(this, input);
+        }
     }
 
      private void PauseGame(InputAction.CallbackContext context)

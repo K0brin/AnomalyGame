@@ -23,7 +23,7 @@ public class ReportSystem : MonoBehaviour
     public SAnomalySpawner spawner;
 
     [Header("Settings")]
-    public float displayTime = 3f;
+    public float displayTime = 3f; // both are customizable so we can make the stun longer
     public float reportDelay = 1f;
 
     private Coroutine currentCoroutine;

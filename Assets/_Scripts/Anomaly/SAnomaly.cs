@@ -5,10 +5,8 @@ using UnityEngine;
 public class SAnomaly : MonoBehaviour
 {
     [SerializeField] private AnomalySO anomalyData;  // Reference to the ScriptableObject
-    [SerializeField] private Transform movedTransform; //Location of object when 'moved'
     private bool isModified = false;  // Tracks if anomaly is not normal anymore
     private GameObject currentPrefab;
-    private GameObject extraPrefab;
 
     private void Start()
     {

@@ -90,4 +90,9 @@ public class SCameraManager : MonoBehaviour
         SAudioManager audioManager = FindAnyObjectByType<SAudioManager>();
         audioManager.Play("click_005");
     }
+
+    public int GetCurrentCam()
+    {
+        return mCurrentCam;
+    }
 }

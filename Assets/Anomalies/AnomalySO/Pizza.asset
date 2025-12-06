@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb82a154946733e4ca16716b40423e0c, type: 3}
   m_Name: Pizza
   m_EditorClassIdentifier: 
-  anomalyName: Missing
+  anomalyName: Moved
   normalPrefab: {fileID: 9162761545224573393, guid: 028f4a0a4a11d31499e2438c3b849a24, type: 3}
   replacedPrefab: {fileID: 5971953270525777111, guid: 92630c1151f184e4595efa640d9f42f7, type: 3}
+  extraPrefab: {fileID: 9162761545224573393, guid: 23d51312eefcd344ea3d23b0d097915b, type: 3}
+  movedPrefab: {fileID: 9162761545224573393, guid: 6926174cc8802e340bcff109658339b7, type: 3}
   roomName: 

@@ -126,11 +126,13 @@ public class SAnomalySpawner : MonoBehaviour
         if(activeCamera == selectedAnomaly.GetAnomalyRoom())
         {
             canSpawn = false;
+            Debug.Log($"Anomaly Attempted to Spawn Where Player Was Looking: {activeCamera}");
         }
         else if(activeCamera == "Empty")
         {
             Debug.Log("Value failed to change");
         }
+
 
         if (canSpawn)
         {
@@ -187,8 +189,7 @@ public class SAnomalySpawner : MonoBehaviour
 
     private void CheckGameOverCondition()
     {
-        Debug.Log(anomaliesNotNormalCount);
-        if (anomaliesNotNormalCount == 3)
+        if (anomaliesNotNormalCount >= 3)
         {
             if (!gameOver)
             {

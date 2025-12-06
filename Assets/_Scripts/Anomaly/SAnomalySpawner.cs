@@ -142,6 +142,7 @@ public class SAnomalySpawner : MonoBehaviour
             selectedAnomaly.ChangeState(newState);
             //change complete
             Debug.Log($"[AnomalySpawner] Anomaly {selectedAnomaly.name} state changed to '{newState}'.");
+            Debug.Log($"[SPAWN LOG] Anomaly spawned: Type = '{selectedAnomaly.GetAnomalyState()}', Room = '{selectedAnomaly.GetAnomalyRoom()}'");
 
             if (selectedAnomaly.GetAnomalyState() != "Normal")
             {

@@ -4805,6 +4805,14 @@ PrefabInstance:
       propertyPath: spawner
       value: 
       objectReference: {fileID: 1126151552}
+    - target: {fileID: 4859382688688036542, guid: 6dfa9c3fbc9a902408007c1a388e2627, type: 3}
+      propertyPath: displayTime
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4859382688688036542, guid: 6dfa9c3fbc9a902408007c1a388e2627, type: 3}
+      propertyPath: reportDelay
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 5000051252983995162, guid: 6dfa9c3fbc9a902408007c1a388e2627, type: 3}
       propertyPath: m_AnchorMax.x
       value: 1

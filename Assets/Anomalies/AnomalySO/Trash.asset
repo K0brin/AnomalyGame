@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Trash
   m_EditorClassIdentifier: 
   anomalyName: Replaced
-  normalPrefab: {fileID: 4537741329851866416, guid: 7accbe6778b11aa4bbd810920788739d, type: 3}
-  replacedPrefab: {fileID: 4537741329851866416, guid: d9ae36c50e6fc974d9db3a3f7d851203, type: 3}
+  normalPrefab: {fileID: 5888289683636215819, guid: 55e2d6c64d996b84999c562dc4260193, type: 3}
+  replacedPrefab: {fileID: 648062014788475228, guid: 79aa463510d8a2d4c9565e3f34dcf186, type: 3}
+  extraPrefab: {fileID: 1738127474727013217, guid: bd7607f86587b8d4b988723bb8dd2f79, type: 3}
+  movedPrefab: {fileID: 5813895089764734048, guid: 0da320089b24d2d4ea8ec37c8fd2c7dd, type: 3}
   roomName: 

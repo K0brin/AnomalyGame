@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb82a154946733e4ca16716b40423e0c, type: 3}
+  m_Name: Fridge
+  m_EditorClassIdentifier: 
+  anomalyName: Replaced
+  normalPrefab: {fileID: 661294712544062961, guid: b28d9eee7534ae745b130cd95c3c14b1, type: 3}
+  replacedPrefab: {fileID: 661294712544062961, guid: 1887aa1f54f3a6046b5c3df7e8eb5414, type: 3}
+  extraPrefab: {fileID: 707276887413633988, guid: b460a6522f8543c4b9dda22c2c8799cd, type: 3}
+  movedPrefab: {fileID: 661294712544062961, guid: 5172514c749e98b47a2e9dadb64df7f6, type: 3}
+  roomName: 

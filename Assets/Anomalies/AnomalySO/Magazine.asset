@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb82a154946733e4ca16716b40423e0c, type: 3}
+  m_Name: Magazine
+  m_EditorClassIdentifier: 
+  anomalyName: Normal
+  normalPrefab: {fileID: 6864518062898224524, guid: db3cadd1c5be41a4599c83858780f200, type: 3}
+  replacedPrefab: {fileID: 3235702541904362259, guid: 513b7c51de8ac6a40b112eb0d0bbfa37, type: 3}
+  extraPrefab: {fileID: 8674646578302206110, guid: b2b4acac448e55f4c8c4eee113112f11, type: 3}
+  movedPrefab: {fileID: 7007607016149228515, guid: c7299959b11b8e843ab6eb639b21ea17, type: 3}
+  roomName: 

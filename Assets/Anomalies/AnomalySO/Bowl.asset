@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb82a154946733e4ca16716b40423e0c, type: 3}
+  m_Name: Bowl
+  m_EditorClassIdentifier: 
+  anomalyName: Replaced
+  normalPrefab: {fileID: 5536597846027552143, guid: b78afc4e45d462341b075703f55834fb, type: 3}
+  replacedPrefab: {fileID: 832347412481369664, guid: ca51ff15e06130449bf2fac2748ba30a, type: 3}
+  extraPrefab: {fileID: 2842726576924440983, guid: 349f20d409558b044afeb0a49b8b9f32, type: 3}
+  movedPrefab: {fileID: 8958447473173566824, guid: 82eba7b281780c14e977a558bb413750, type: 3}
+  roomName: 

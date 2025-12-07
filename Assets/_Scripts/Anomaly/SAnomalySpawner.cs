@@ -136,7 +136,7 @@ public class SAnomalySpawner : MonoBehaviour
         }
         else
         {
-            ChangeRandomAnomalyState();
+             ChangeRandomAnomalyState();
         }
 
         //change complete

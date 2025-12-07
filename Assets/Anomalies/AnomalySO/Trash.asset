@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb82a154946733e4ca16716b40423e0c, type: 3}
+  m_Name: Trash
+  m_EditorClassIdentifier: 
+  anomalyName: Replaced
+  normalPrefab: {fileID: 5888289683636215819, guid: 55e2d6c64d996b84999c562dc4260193, type: 3}
+  replacedPrefab: {fileID: 648062014788475228, guid: 79aa463510d8a2d4c9565e3f34dcf186, type: 3}
+  extraPrefab: {fileID: 1738127474727013217, guid: bd7607f86587b8d4b988723bb8dd2f79, type: 3}
+  movedPrefab: {fileID: 5813895089764734048, guid: 0da320089b24d2d4ea8ec37c8fd2c7dd, type: 3}
+  roomName: 

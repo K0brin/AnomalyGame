@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb82a154946733e4ca16716b40423e0c, type: 3}
+  m_Name: Ladder
+  m_EditorClassIdentifier: 
+  anomalyName: Normal
+  normalPrefab: {fileID: 2747672202633488508, guid: 80bfaee4231de0e49b8e1900460a358e, type: 3}
+  replacedPrefab: {fileID: 619927611379738812, guid: 4356ddf373348f641b195443913fe8a2, type: 3}
+  extraPrefab: {fileID: 1226077678165076098, guid: 37abc5f7291db9846949267ea94c8e15, type: 3}
+  movedPrefab: {fileID: 6258077418602871730, guid: c8df948ba47883a45b7102344cb50d33, type: 3}
+  roomName: 

@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb82a154946733e4ca16716b40423e0c, type: 3}
+  m_Name: Chair3
+  m_EditorClassIdentifier: 
+  anomalyName: Extra
+  normalPrefab: {fileID: 6319966884603680152, guid: 958e68cbf2c119b4e9059e0e3687c550, type: 3}
+  replacedPrefab: {fileID: 2874233791601567169, guid: 91a4304efd719bf4fb087fc8b72357be, type: 3}
+  extraPrefab: {fileID: 5382053303672845036, guid: 05a1e32e607573541b141e934456ab84, type: 3}
+  movedPrefab: {fileID: 3361890650772518351, guid: ed5b334112114d046a957cccdf2b1d3b, type: 3}
+  roomName: 

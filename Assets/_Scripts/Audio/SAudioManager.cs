@@ -3,7 +3,15 @@ using System;
 
 public class SAudioManager : MonoBehaviour
 {
+
+    // MG added floats for audio settings
+    public float masterVolume = 1f;
+    public float musicVolume = 1f;
+    public float caseohVolume = 1f;
+
+
     public static SAudioManager Instance;
+
 
     public SSound[] sounds;
     void Awake()
@@ -76,10 +84,33 @@ public class SAudioManager : MonoBehaviour
 
     public void SetVolume(string name, float volume)
     {
+        //MG added master and music for the audio settings
+        if (name == "Master")
+        {
+            masterVolume = volume;
+            ApplyVolumes();
+            return;
+        }
+
+        if (name == "Music")
+        {
+            musicVolume = volume;
+            ApplyVolumes();
+            return;
+        }
+
+        if (name == "CaseOh")
+        {
+            Debug.Log("Setting CaseOh volume to: " + volume);
+            caseohVolume = volume;
+            ApplyVolumes();
+            return;
+        }
+
         SSound s = Array.Find(sounds, sound => sound.name == name);
         if (s != null)
         {
-            s.source.volume = volume;
+            s.source.volume = volume * masterVolume;
         }
     }
 
@@ -91,6 +122,26 @@ public class SAudioManager : MonoBehaviour
             return s.source.volume;
         }
         return 0f;
+    }
+
+    //MG added method for audio settings
+    private void ApplyVolumes()
+    {
+        foreach (SSound s in sounds)
+        {
+            float category = 1f;
+
+            if (s.name.Contains("Music") || s.name == "Level_01")
+                category = musicVolume;
+
+            if (s.name == "CaseOh")
+            {
+                Debug.Log("Applying CaseOh volume: " + caseohVolume);
+                category = caseohVolume;
+            }
+
+            s.source.volume = s.volume * masterVolume * category;
+        }
     }
 
     public void Pause(string name)

@@ -4,7 +4,6 @@ using System.Collections;
 using Unity.VisualScripting;
 using TMPro;
 using UnityEditor;
-using UnityEngine.LightTransport;
 using NUnit.Framework.Internal;
 
 public class SAnomalySpawner : MonoBehaviour
@@ -17,11 +16,17 @@ public class SAnomalySpawner : MonoBehaviour
     private SAudioManager sAudioManager;
     private float typeTime = 0.1f;
     private float timer = 0f;
-    private List<SAnomaly> normalAnomalies = new List<SAnomaly>();  // List of current normal anomalies
-    private List<SAnomaly> anomaliesNotNormal = new List<SAnomaly>();  // List of current non-normal anomalies
+
+    //MG changed protection levels so ReportSystem can access it
+    public List<SAnomaly> normalAnomalies = new List<SAnomaly>();  // List of current normal anomalies
+    public List<SAnomaly> anomaliesNotNormal = new List<SAnomaly>();  // List of current non-normal anomalies
+
     private int anomaliesNotNormalCount = 0;  // Counter for anomalies not normal, have report system remove from count when submitting is successful
     public bool gameOver = false;  
     SCameraManager cameraManager;
+
+    //MG added a test bool for debugging
+    private bool hasSpawnedTestAnomaly = false;
 
     void Start()
     {
@@ -34,6 +39,9 @@ public class SAnomalySpawner : MonoBehaviour
 
     void Update()
     {
+        if (hasSpawnedTestAnomaly) //MG added test debugging bool
+            return;
+
         timer += Time.deltaTime;
 
         if (timer >= changeInterval && !gameOver)
@@ -140,6 +148,7 @@ public class SAnomalySpawner : MonoBehaviour
             selectedAnomaly.ChangeState(newState);
             //change complete
             Debug.Log($"[AnomalySpawner] Anomaly {selectedAnomaly.name} state changed to '{newState}'.");
+            Debug.Log($"[SPAWN LOG] Anomaly spawned: Type = '{selectedAnomaly.GetAnomalyState()}', Room = '{selectedAnomaly.GetAnomalyRoom()}'");
 
             if (selectedAnomaly.GetAnomalyState() != "Normal")
             {
@@ -147,6 +156,8 @@ public class SAnomalySpawner : MonoBehaviour
                 anomaliesNotNormal.Add(selectedAnomaly);
                 anomaliesNotNormalCount++;  // Increase the count of anomalies that aren't "Normal"
             }
+
+            hasSpawnedTestAnomaly = true; //MG added test code for debugging
 
         }
         else
@@ -160,7 +171,8 @@ public class SAnomalySpawner : MonoBehaviour
     //called by report script
     //AnomalyState: "Missing", "Moved", "Replaced", "Extra"
     //RoomName: Garage, LivingRoom, Backyard, Kitchen
-    private void EraseAnomaly(string AnomalyState, string RoomName)
+    //MG changed EraseAnomaly's protection level so that ReportSystem can access it
+    public void EraseAnomaly(string AnomalyState, string RoomName)
     {
         if (anomaliesNotNormal.Count == 0)
         {

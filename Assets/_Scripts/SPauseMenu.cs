@@ -53,9 +53,9 @@ public class SPauseMenu : MonoBehaviour
         Time.timeScale = 1f;
         GameIsPaused = false;
 
-        if (audioManager != null)
+        //if (audioManager != null)
         {
-            audioManager.SetVolume("Level_01", originalVolume);
+            //audioManager.SetVolume("Level_01", originalVolume);
         }
 
     }
@@ -66,9 +66,9 @@ public class SPauseMenu : MonoBehaviour
         Time.timeScale = 0f;
         GameIsPaused = true;
 
-        if (audioManager != null)
+        //if (audioManager != null)
         {
-            audioManager.SetVolume("Level_01", reducedVolume);
+            //audioManager.SetVolume("Level_01", reducedVolume);
         }
 
     }

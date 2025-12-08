@@ -3,6 +3,10 @@ using System;
 
 public class SAudioManager : MonoBehaviour
 {
+    // MG added floats for audio settings
+    public float masterVolume = 1f;
+    public float musicVolume = 1f;
+
 
     public SSound[] sounds;
     void Awake()
@@ -65,10 +69,25 @@ public class SAudioManager : MonoBehaviour
 
     public void SetVolume(string name, float volume)
     {
+        //MG added master and music for the audio settings
+        if (name == "Master")
+        {
+            masterVolume = volume;
+            ApplyVolumes();
+            return;
+        }
+
+        if (name == "Music")
+        {
+            musicVolume = volume;
+            ApplyVolumes();
+            return;
+        }
+
         SSound s = Array.Find(sounds, sound => sound.name == name);
         if (s != null)
         {
-            s.source.volume = volume;
+            s.source.volume = volume * masterVolume;
         }
     }
 
@@ -81,4 +100,19 @@ public class SAudioManager : MonoBehaviour
         }
         return 0f;
     }
+
+    //MG added method for audio settings
+    private void ApplyVolumes()
+    {
+        foreach (SSound s in sounds)
+        {
+            float category = 1f;
+
+            if (s.name.Contains("Music") || s.name == "Level_01") // adjust to fit your naming
+                category = musicVolume;
+
+            s.source.volume = s.volume * masterVolume * category;
+        }
+    }
+
 }

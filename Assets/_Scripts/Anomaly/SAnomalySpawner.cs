@@ -4,7 +4,6 @@ using System.Collections;
 using Unity.VisualScripting;
 using TMPro;
 using UnityEditor;
-using UnityEngine.LightTransport;
 using NUnit.Framework.Internal;
 
 public class SAnomalySpawner : MonoBehaviour
@@ -26,6 +25,9 @@ public class SAnomalySpawner : MonoBehaviour
     public bool gameOver = false;  
     SCameraManager cameraManager;
 
+    //MG added a test bool for debugging
+    private bool hasSpawnedTestAnomaly = false;
+
     void Start()
     {
         cameraManager = GameObject.FindGameObjectWithTag("CameraManager").GetComponent<SCameraManager>();
@@ -36,6 +38,9 @@ public class SAnomalySpawner : MonoBehaviour
 
     void Update()
     {
+        if (hasSpawnedTestAnomaly) //MG added test debugging bool
+            return;
+
         timer += Time.deltaTime;
 
         if (timer >= changeInterval)
@@ -150,6 +155,8 @@ public class SAnomalySpawner : MonoBehaviour
                 anomaliesNotNormal.Add(selectedAnomaly);
                 anomaliesNotNormalCount++;  // Increase the count of anomalies that aren't "Normal"
             }
+
+            hasSpawnedTestAnomaly = true; //MG added test code for debugging
 
         }
         else

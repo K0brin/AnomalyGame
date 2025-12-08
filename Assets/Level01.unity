@@ -213,7 +213,7 @@ GameObject:
   - component: {fileID: 485652357}
   m_Layer: 0
   m_Name: GameManager
-  m_TagString: Untagged
+  m_TagString: GameManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1070,7 +1070,6 @@ MonoBehaviour:
   minChangeInterval: 5
   maxChangeInterval: 10
   warningUI: {fileID: 959407103}
-  warningAudio: {fileID: 1666800024}
   gameOver: 0
 --- !u!4 &1126151553
 Transform:

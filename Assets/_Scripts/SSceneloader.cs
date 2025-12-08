@@ -15,8 +15,6 @@ public class SSceneLoader : MonoBehaviour
         Debug.Log("Loading Menu....");
         Time.timeScale = 1.0f;
         SceneManager.LoadScene(0);
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
     }
 
     public void LoadLevel01()
@@ -24,10 +22,24 @@ public class SSceneLoader : MonoBehaviour
         Debug.Log("Loading Level 1....");
         Time.timeScale = 1.0f;
         SceneManager.LoadScene(1);
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
 
 
+    }
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (SGameInput.Instance != null)
+            SGameInput.Instance.RefreshCursor();
     }
 
 }

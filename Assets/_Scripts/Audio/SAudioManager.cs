@@ -3,10 +3,21 @@ using System;
 
 public class SAudioManager : MonoBehaviour
 {
+    public static SAudioManager Instance;
 
     public SSound[] sounds;
     void Awake()
     {
+        if(Instance == null)
+            Instance = this;
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        DontDestroyOnLoad(gameObject);
+
         foreach (SSound s in sounds)
         {
             s.source = gameObject.AddComponent<AudioSource>();
@@ -81,4 +92,31 @@ public class SAudioManager : MonoBehaviour
         }
         return 0f;
     }
+
+    public void Pause(string name)
+    {
+        SSound s = Array.Find(sounds, sound => sound.name == name);
+
+        if (s == null)
+        {
+            Debug.Log("Sound not found to pause");
+            return;
+        }
+
+        s.source.Pause();
+    }
+
+    public void Resume(string name)
+    {
+        SSound s = Array.Find(sounds, sound => sound.name == name);
+
+        if (s == null)
+        {
+            Debug.Log("Sound not found to resume");
+            return;
+        }
+
+        s.source.UnPause();
+    }
+
 }

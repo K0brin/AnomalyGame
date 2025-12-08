@@ -14,7 +14,7 @@ public class SAnomalySpawner : MonoBehaviour
     [SerializeField] private float maxChangeInterval = 10;
     private float changeInterval;  // Seconds before anomaly change
     [SerializeField] private GameObject warningUI;
-    [SerializeField] AudioSource warningAudio;
+    private SAudioManager sAudioManager;
     private float typeTime = 0.1f;
     private float timer = 0f;
     private List<SAnomaly> normalAnomalies = new List<SAnomaly>();  // List of current normal anomalies
@@ -25,6 +25,7 @@ public class SAnomalySpawner : MonoBehaviour
 
     void Start()
     {
+        sAudioManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<SAudioManager>();
         cameraManager = GameObject.FindGameObjectWithTag("CameraManager").GetComponent<SCameraManager>();
         warningUI.SetActive(false);
         InitializeAnomalies();
@@ -35,7 +36,7 @@ public class SAnomalySpawner : MonoBehaviour
     {
         timer += Time.deltaTime;
 
-        if (timer >= changeInterval)
+        if (timer >= changeInterval && !gameOver)
         {
             timer = 0f;  // Reset timer
             ChangeRandomAnomalyState();
@@ -206,15 +207,15 @@ public class SAnomalySpawner : MonoBehaviour
 
     private IEnumerator PlayWarning()
     {
-        warningAudio.Play();
+        sAudioManager.Play("warningSound");
         string inputText = "THIS IS AN EMERGENCY WARNING!";
         StartCoroutine(TypeWriter(inputText));
         yield return new WaitForSeconds(typeTime * inputText.Length + 2);
-        warningAudio.Play();
+        sAudioManager.Play("warningSound");
         inputText = "WE ARE RECIEVING READINGS OF MULTIPLE ACTIVE ANOMALIES IN YOUR AREA";
         StartCoroutine(TypeWriter(inputText));
         yield return new WaitForSeconds(typeTime * inputText.Length + 2);
-        warningAudio.Play();
+        sAudioManager.Play("warningSound");
         inputText = "PLEASE LOCATE THE ANOMALIES AND SEND REPORTS ASAP";
         StartCoroutine(TypeWriter(inputText));
         yield return new WaitForSeconds(typeTime * inputText.Length + 2);
@@ -237,7 +238,7 @@ public class SAnomalySpawner : MonoBehaviour
 			warningText.text += leadingChar;
 			yield return new WaitForSeconds(typeTime);
         }
-        warningAudio.Stop();
+        sAudioManager.Stop("warningSound");
     }
 
     private void RandomizeChangeInterval()

@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class SPauseMenu : MonoBehaviour
 {
+    public static SPauseMenu Instance { get; private set; }
+
     public static bool GameIsPaused = false;
     public GameObject pauseMenuUI;
 
@@ -11,15 +13,25 @@ public class SPauseMenu : MonoBehaviour
 
     private void Awake()
     {
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+            return; 
+        }
+        Instance = this;
+
         audioManager = FindFirstObjectByType<SAudioManager>();
+
+        if (pauseMenuUI == null)
+        {
+            Debug.LogWarning("Pause Menu UI not assigned in the inspector.");
+        }
     }
 
     private void Start()
     {
         Resume();
-        
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
+
     }
 
     public void TogglePause()
@@ -41,7 +53,7 @@ public class SPauseMenu : MonoBehaviour
         Time.timeScale = 1f;
         GameIsPaused = false;
 
-        if (audioManager != null && audioManager.IsPlaying("Level_01"))
+        if (audioManager != null)
         {
             audioManager.SetVolume("Level_01", originalVolume);
         }
@@ -54,10 +66,12 @@ public class SPauseMenu : MonoBehaviour
         Time.timeScale = 0f;
         GameIsPaused = true;
 
-        if (audioManager != null && audioManager.IsPlaying("Level_01"))
+        if (audioManager != null)
         {
             audioManager.SetVolume("Level_01", reducedVolume);
         }
 
     }
+
+    
 }

@@ -36,7 +36,7 @@ public class SAnomalySpawner : MonoBehaviour
     {
         timer += Time.deltaTime;
 
-        if (timer >= changeInterval)
+        if (timer >= changeInterval && !gameOver)
         {
             timer = 0f;  // Reset timer
             ChangeRandomAnomalyState();

@@ -3,14 +3,28 @@ using System;
 
 public class SAudioManager : MonoBehaviour
 {
+
     // MG added floats for audio settings
     public float masterVolume = 1f;
     public float musicVolume = 1f;
 
 
+    public static SAudioManager Instance;
+
+
     public SSound[] sounds;
     void Awake()
     {
+        if(Instance == null)
+            Instance = this;
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        DontDestroyOnLoad(gameObject);
+
         foreach (SSound s in sounds)
         {
             s.source = gameObject.AddComponent<AudioSource>();
@@ -113,6 +127,32 @@ public class SAudioManager : MonoBehaviour
 
             s.source.volume = s.volume * masterVolume * category;
         }
+    }
+
+    public void Pause(string name)
+    {
+        SSound s = Array.Find(sounds, sound => sound.name == name);
+
+        if (s == null)
+        {
+            Debug.Log("Sound not found to pause");
+            return;
+        }
+
+        s.source.Pause();
+    }
+
+    public void Resume(string name)
+    {
+        SSound s = Array.Find(sounds, sound => sound.name == name);
+
+        if (s == null)
+        {
+            Debug.Log("Sound not found to resume");
+            return;
+        }
+
+        s.source.UnPause();
     }
 
 }

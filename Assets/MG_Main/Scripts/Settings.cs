@@ -7,9 +7,12 @@ public class Settings : MonoBehaviour
 {
     public SAudioManager audioManager;
 
+    [Header("Audio")]
     public Slider masterVolumeSlider;
     public Slider musicVolumeSlider;
+    public Slider caseohVolumeSlider;
 
+    [Header("Display")]
     public TMP_Dropdown resolutionDropdown;
     public Toggle fullscreenToggle;
 
@@ -18,27 +21,39 @@ public class Settings : MonoBehaviour
     private void Start()
     {
         SetupDisplay();
+        SetupAudio();
+    }
 
-        if (audioManager != null)
-        {
-            masterVolumeSlider.SetValueWithoutNotify(audioManager.GetVolume("Level_01"));
-            musicVolumeSlider.SetValueWithoutNotify(audioManager.GetVolume("Level_01"));
-        }
+    private void SetupAudio()
+    {
+        if (audioManager == null) return;
+
+
+        masterVolumeSlider.SetValueWithoutNotify(audioManager.masterVolume);
+        musicVolumeSlider.SetValueWithoutNotify(audioManager.musicVolume);
+        caseohVolumeSlider.SetValueWithoutNotify(audioManager.caseohVolume);
 
         masterVolumeSlider.onValueChanged.AddListener(SetMasterVolume);
         musicVolumeSlider.onValueChanged.AddListener(SetMusicVolume);
+        caseohVolumeSlider.onValueChanged.AddListener(SetCaseOhVolume);
     }
 
     public void SetMasterVolume(float value)
     {
-        audioManager.SetVolume("Level_01", value);
+        audioManager.SetVolume("Master", value);
     }
 
     public void SetMusicVolume(float value)
     {
-        audioManager.SetVolume("Level_01", value);
+        audioManager.SetVolume("Music", value);
     }
 
+    public void SetCaseOhVolume(float value)
+    {
+        audioManager.SetVolume("CaseOh", value);
+    }
+
+ 
     private void SetupDisplay()
     {
         resolutions = Screen.resolutions;
@@ -62,25 +77,20 @@ public class Settings : MonoBehaviour
 
         resolutionDropdown.AddOptions(options);
 
-        // Load saved values or defaults
         int savedRes = PlayerPrefs.GetInt("ResolutionIndex", currentResIndex);
         bool savedFullscreen = PlayerPrefs.GetInt("Fullscreen", 1) == 1;
 
-        // Set UI values without triggering events
         resolutionDropdown.SetValueWithoutNotify(savedRes);
         resolutionDropdown.RefreshShownValue();
         fullscreenToggle.SetIsOnWithoutNotify(savedFullscreen);
 
-        // Apply settings AFTER UI values are set
         ApplyFullscreen(savedFullscreen);
         ApplyResolution(savedRes);
 
-        // Add listeners
         resolutionDropdown.onValueChanged.AddListener(ApplyResolution);
         fullscreenToggle.onValueChanged.AddListener(ApplyFullscreen);
     }
 
-    // Apply resolution change
     private void ApplyResolution(int index)
     {
         PlayerPrefs.SetInt("ResolutionIndex", index);
@@ -89,12 +99,10 @@ public class Settings : MonoBehaviour
         Screen.SetResolution(r.width, r.height, fullscreenToggle.isOn);
     }
 
-    // Apply fullscreen change
     private void ApplyFullscreen(bool value)
     {
         PlayerPrefs.SetInt("Fullscreen", value ? 1 : 0);
-
         Screen.fullScreen = value;
-        Debug.Log("Fullscreen applied: " + Screen.fullScreen);
     }
 }
+

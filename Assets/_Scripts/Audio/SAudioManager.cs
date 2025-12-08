@@ -7,6 +7,7 @@ public class SAudioManager : MonoBehaviour
     // MG added floats for audio settings
     public float masterVolume = 1f;
     public float musicVolume = 1f;
+    public float caseohVolume = 1f;
 
 
     public static SAudioManager Instance;
@@ -98,6 +99,14 @@ public class SAudioManager : MonoBehaviour
             return;
         }
 
+        if (name == "CaseOh")
+        {
+            Debug.Log("Setting CaseOh volume to: " + volume);
+            caseohVolume = volume;
+            ApplyVolumes();
+            return;
+        }
+
         SSound s = Array.Find(sounds, sound => sound.name == name);
         if (s != null)
         {
@@ -122,8 +131,14 @@ public class SAudioManager : MonoBehaviour
         {
             float category = 1f;
 
-            if (s.name.Contains("Music") || s.name == "Level_01") // adjust to fit your naming
+            if (s.name.Contains("Music") || s.name == "Level_01")
                 category = musicVolume;
+
+            if (s.name == "CaseOh")
+            {
+                Debug.Log("Applying CaseOh volume: " + caseohVolume);
+                category = caseohVolume;
+            }
 
             s.source.volume = s.volume * masterVolume * category;
         }

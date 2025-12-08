@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb82a154946733e4ca16716b40423e0c, type: 3}
+  m_Name: LawnMower
+  m_EditorClassIdentifier: 
+  anomalyName: Normal
+  normalPrefab: {fileID: 420521734277949201, guid: dc1a946873fbf604bbbd8e34a4b903c2, type: 3}
+  replacedPrefab: {fileID: 5109028436367027318, guid: 1ff166a04b3f71d498b8e422a6a7a9ca, type: 3}
+  extraPrefab: {fileID: 7288365273010958847, guid: d196cf92c3f171e4cb4eb8f51b5d713f, type: 3}
+  movedPrefab: {fileID: 6555926790172526635, guid: 568e552e85fbe56438cc665b1b208874, type: 3}
+  roomName: 

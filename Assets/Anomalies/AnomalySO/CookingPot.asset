@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb82a154946733e4ca16716b40423e0c, type: 3}
+  m_Name: CookingPot
+  m_EditorClassIdentifier: 
+  anomalyName: Moved
+  normalPrefab: {fileID: 890158601255540640, guid: e08630a492c2f594e9271a9ed8bc0462, type: 3}
+  replacedPrefab: {fileID: 722879661525611208, guid: 3bf27d85da0a5b44fb66fb25c684140f, type: 3}
+  extraPrefab: {fileID: 7134066990731645841, guid: f9fab1aa064b0a644b23165f048948a0, type: 3}
+  movedPrefab: {fileID: 414591011281863311, guid: 889af7edd9e6f074b963b907cc5801e5, type: 3}
+  roomName: 

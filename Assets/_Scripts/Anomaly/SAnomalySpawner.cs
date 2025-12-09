@@ -9,8 +9,8 @@ using NUnit.Framework.Internal;
 public class SAnomalySpawner : MonoBehaviour
 {
     [SerializeField] private GameObject[] anomalyPrefabs;  
-    [SerializeField] private float minChangeInterval = 5;
-    [SerializeField] private float maxChangeInterval = 10;
+    [SerializeField] private float minChangeInterval = 120;
+    [SerializeField] private float maxChangeInterval = 180;
     private float changeInterval;  // Seconds before anomaly change
     [SerializeField] private GameObject warningUI;
     private SAudioManager sAudioManager;

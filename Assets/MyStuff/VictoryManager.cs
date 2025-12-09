@@ -42,12 +42,14 @@ public class VictoryManager : MonoBehaviour
     private void RunLoss()
     {
         Time.timeScale = 0f;
+        SPauseMenu.GameIsPaused = true;
         LossScreen.SetActive(true);
     }
 
     private void RunVictory()
     {
         Time.timeScale = 0f;
+        SPauseMenu.GameIsPaused = true;
         VictoryScreen.SetActive(true);
     }
 }

@@ -26,7 +26,7 @@ public class SAnomalySpawner : MonoBehaviour
     SCameraManager cameraManager;
 
     //MG added a test bool for debugging
-    private bool hasSpawnedTestAnomaly = false;
+    //private bool hasSpawnedTestAnomaly = false;
 
     void Start()
     {
@@ -39,8 +39,10 @@ public class SAnomalySpawner : MonoBehaviour
 
     void Update()
     {
-       // if (hasSpawnedTestAnomaly) //MG added test debugging bool
-            //return;
+        /*
+        if (hasSpawnedTestAnomaly) //MG added test debugging bool
+            return;
+        */
 
         timer += Time.deltaTime;
 
@@ -157,7 +159,7 @@ public class SAnomalySpawner : MonoBehaviour
                 anomaliesNotNormalCount++;  // Increase the count of anomalies that aren't "Normal"
             }
 
-           // hasSpawnedTestAnomaly = true; //MG added test code for debugging
+            //hasSpawnedTestAnomaly = true; //MG added test code for debugging
 
         }
         else
@@ -180,6 +182,8 @@ public class SAnomalySpawner : MonoBehaviour
             return;
         }
 
+        //corrected foreach to a for loop to account for reducing amount of notnormalanomalies
+        /*
         //check each active anomaly
         foreach(var activeAnomaly in anomaliesNotNormal)
         {
@@ -193,11 +197,37 @@ public class SAnomalySpawner : MonoBehaviour
                 //remove from active, add to normal
                 anomaliesNotNormal.Remove(activeAnomaly);
                 normalAnomalies.Add(activeAnomaly);
-                anomaliesNotNormalCount++; //reduce amount of not normal anomalies
+                anomaliesNotNormalCount--; //reduce amount of not normal anomalies
                 Debug.Log($"Anomaly of Type{AnomalyState} and In Room{RoomName} Successfully Reverted");
                 break;
             }
         }
+        */
+
+        for (int i = 0; i < normalAnomalies.Count; i++)
+        {
+            var activeAnomaly = anomaliesNotNormal[i];
+
+            Debug.Log(activeAnomaly.GetAnomalyRoom());
+
+            if (activeAnomaly.GetAnomalyState() == AnomalyState && activeAnomaly.GetAnomalyRoom() == RoomName)
+            {
+                activeAnomaly.RevertState();
+
+                anomaliesNotNormal.RemoveAt(i);
+                normalAnomalies.Add(activeAnomaly);
+
+                Debug.Log($"[EraseAnomaly] anomaliesNotNormalCount BEFORE removal = {anomaliesNotNormalCount}");
+
+                anomaliesNotNormalCount--;
+
+                Debug.Log($"[EraseAnomaly] anomaliesNotNormalCount AFTER removal = {anomaliesNotNormalCount}");
+                Debug.Log($"Anomaly of Type {AnomalyState} in Room {RoomName} Successfully Reverted");
+                return;
+            }
+        }
+
+        Debug.LogWarning($"No Anomaly found matching Type {AnomalyState} in Room {RoomName}");
     }
 
     private void CheckGameOverCondition()

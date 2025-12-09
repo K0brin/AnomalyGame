@@ -25,7 +25,11 @@ public class TimerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        TimePasses();
+        
+        if (!SPauseMenu.GameIsPaused)        //JB added check for game pause
+        {
+            TimePasses();  
+        }
 
         TimerText.text = $"{HourTimer:00} : {MinuteTimer:00}";
 

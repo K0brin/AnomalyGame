@@ -36,6 +36,7 @@ public class SPauseMenu : MonoBehaviour
 
     public void TogglePause()
     {
+
         if (GameIsPaused)
         {
             Resume();

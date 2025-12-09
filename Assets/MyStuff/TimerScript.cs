@@ -5,6 +5,7 @@ using System;
 public class TimerScript : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI TimerText;
+    [SerializeField] private float mDuration = 0.2f;
 
     private VictoryManager victoryManager;
 
@@ -17,6 +18,8 @@ public class TimerScript : MonoBehaviour
         HourTimer = 0;
         MinuteTimer = 0;
         MinuteProgression = 0f;
+
+        victoryManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<VictoryManager>();
     }
 
     // Update is called once per frame
@@ -40,7 +43,7 @@ public class TimerScript : MonoBehaviour
 
     private void TimePasses()
     {
-        MinuteProgression += 0.2f * Time.deltaTime;
+        MinuteProgression += mDuration * Time.deltaTime;
 
         if (MinuteProgression >= 1f)
         {

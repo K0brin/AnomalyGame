@@ -6,6 +6,7 @@ TagManager:
   tags:
   - CameraManager
   - GameManager
+  - AnomalyManager
   layers:
   - Default
   - TransparentFX

@@ -39,8 +39,8 @@ public class SAnomalySpawner : MonoBehaviour
 
     void Update()
     {
-        if (hasSpawnedTestAnomaly) //MG added test debugging bool
-            return;
+       // if (hasSpawnedTestAnomaly) //MG added test debugging bool
+            //return;
 
         timer += Time.deltaTime;
 
@@ -157,7 +157,7 @@ public class SAnomalySpawner : MonoBehaviour
                 anomaliesNotNormalCount++;  // Increase the count of anomalies that aren't "Normal"
             }
 
-            hasSpawnedTestAnomaly = true; //MG added test code for debugging
+           // hasSpawnedTestAnomaly = true; //MG added test code for debugging
 
         }
         else

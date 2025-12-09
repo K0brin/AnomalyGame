@@ -6,12 +6,21 @@ public class VictoryManager : MonoBehaviour
     [SerializeField] private GameObject VictoryScreen;
     [SerializeField] private GameObject LossScreen;
 
+    SAnomalySpawner sAnomalySpawner;
+
     public bool HaveWon = false; 
     public bool HaveLost = false;
+
+    void Awake()
+    {
+        Time.timeScale = 1f;
+    }
     void Start()
     {
         HaveWon = false;
         HaveLost = false;
+
+        sAnomalySpawner = GameObject.FindGameObjectWithTag("AnomalyManager").GetComponent<SAnomalySpawner>();
 
         VictoryScreen.SetActive(false);
         LossScreen.SetActive(false);
@@ -24,7 +33,7 @@ public class VictoryManager : MonoBehaviour
             RunVictory(); //Handles winning the game
         }
 
-        if(HaveLost == true)
+        if(sAnomalySpawner.gameOver == true)
         {
             RunLoss(); //Handles when the player loses
         }

@@ -255,6 +255,13 @@ MonoBehaviour:
     loop: 0
     spatialBlend: 0
     source: {fileID: 0}
+  - name: warningSound
+    clip: {fileID: 8300000, guid: 94a9dd7922e65b04fa41f1d394dde5d0, type: 3}
+    volume: 0.32
+    pitch: 1
+    loop: 0
+    spatialBlend: 0
+    source: {fileID: 0}
 --- !u!4 &485652358
 Transform:
   m_ObjectHideFlags: 0
@@ -372,9 +379,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4859382688688036542, guid: 6dfa9c3fbc9a902408007c1a388e2627, type: 3}
+      propertyPath: tvClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 335be6824687dc84bac267470a2c5193, type: 3}
+    - target: {fileID: 4859382688688036542, guid: 6dfa9c3fbc9a902408007c1a388e2627, type: 3}
       propertyPath: spawner
       value: 
       objectReference: {fileID: 1126151552}
+    - target: {fileID: 4859382688688036542, guid: 6dfa9c3fbc9a902408007c1a388e2627, type: 3}
+      propertyPath: tvSource
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 6803072567473568938, guid: 6dfa9c3fbc9a902408007c1a388e2627, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0

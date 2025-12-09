@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class ReportSystem : MonoBehaviour
 {
@@ -28,6 +29,9 @@ public class ReportSystem : MonoBehaviour
 
     private Coroutine currentCoroutine;
     private bool anomalyExistsFlag;
+
+    
+    public AudioClip tvClip;
 
     void Awake()
     {
@@ -102,6 +106,16 @@ public class ReportSystem : MonoBehaviour
         {
             Debug.Log("Anomaly exists! Triggering stun and removing anomaly.");
             stunImage.gameObject.SetActive(true);
+
+            GameObject audioObj = new GameObject("TempAudio");
+            AudioSource aSrc = audioObj.AddComponent<AudioSource>();
+            aSrc.clip = tvClip;
+            aSrc.volume = 0.8f;
+            aSrc.spatialBlend = 0f;
+            aSrc.Play();
+            Destroy(audioObj, 3f);
+
+
             spawner.EraseAnomaly(selectedAnomaly, selectedRoom);
             Debug.Log($"EraseAnomaly called for Room = '{selectedRoom}', Anomaly = '{selectedAnomaly}'");
             yield return new WaitForSeconds(displayTime);

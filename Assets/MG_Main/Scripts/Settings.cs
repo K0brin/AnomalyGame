@@ -5,7 +5,7 @@ using TMPro;
 
 public class Settings : MonoBehaviour
 {
-    public SAudioManager audioManager;
+    public SAudioManager audioManager; //plug in SAudioManager in Inspector
 
     [Header("Audio")]
     public Slider masterVolumeSlider;

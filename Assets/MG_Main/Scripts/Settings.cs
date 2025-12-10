@@ -10,7 +10,6 @@ public class Settings : MonoBehaviour
     [Header("Audio")]
     public Slider masterVolumeSlider;
     public Slider musicVolumeSlider;
-    public Slider caseohVolumeSlider;
 
     [Header("Display")]
     public TMP_Dropdown resolutionDropdown;
@@ -31,11 +30,9 @@ public class Settings : MonoBehaviour
 
         masterVolumeSlider.SetValueWithoutNotify(audioManager.masterVolume);
         musicVolumeSlider.SetValueWithoutNotify(audioManager.musicVolume);
-        caseohVolumeSlider.SetValueWithoutNotify(audioManager.caseohVolume);
 
         masterVolumeSlider.onValueChanged.AddListener(SetMasterVolume);
         musicVolumeSlider.onValueChanged.AddListener(SetMusicVolume);
-        caseohVolumeSlider.onValueChanged.AddListener(SetCaseOhVolume);
     }
 
     public void SetMasterVolume(float value)

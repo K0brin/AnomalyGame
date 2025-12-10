@@ -5,8 +5,9 @@ public class VictoryManager : MonoBehaviour
 {
     [SerializeField] private GameObject VictoryScreen;
     [SerializeField] private GameObject LossScreen;
+    [SerializeField] private SAnomalySpawner AnomalySpawner;
 
-    SAnomalySpawner sAnomalySpawner;
+    // SAnomalySpawner sAnomalySpawner;
 
     public bool HaveWon = false; 
     public bool HaveLost = false;
@@ -20,7 +21,7 @@ public class VictoryManager : MonoBehaviour
         HaveWon = false;
         HaveLost = false;
 
-        sAnomalySpawner = GameObject.FindGameObjectWithTag("AnomalyManager").GetComponent<SAnomalySpawner>();
+        //sAnomalySpawner = GameObject.FindGameObjectWithTag("AnomalyManager").GetComponent<SAnomalySpawner>(); //JB reload issues with tags
 
         VictoryScreen.SetActive(false);
         LossScreen.SetActive(false);
@@ -33,7 +34,7 @@ public class VictoryManager : MonoBehaviour
             RunVictory(); //Handles winning the game
         }
 
-        if(sAnomalySpawner.gameOver == true)
+        if(AnomalySpawner.gameOver == true)
         {
             RunLoss(); //Handles when the player loses
         }

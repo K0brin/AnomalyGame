@@ -5,9 +5,10 @@ using System;
 public class TimerScript : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI TimerText;
+    [SerializeField] private VictoryManager victoryManager; //JB
     [SerializeField] private float mDuration = 0.2f;
 
-    private VictoryManager victoryManager;
+    //private VictoryManager victoryManager; //JB changed from tag due to scene reloads creating null with tags.
 
     private float MinuteProgression;
     private int MinuteTimer = 0;
@@ -18,8 +19,8 @@ public class TimerScript : MonoBehaviour
         HourTimer = 0;
         MinuteTimer = 0;
         MinuteProgression = 0f;
+        //victoryManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<VictoryManager>(); //JB changed from tag due to scene reloads creating null with tags.
 
-        victoryManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<VictoryManager>();
     }
 
     // Update is called once per frame

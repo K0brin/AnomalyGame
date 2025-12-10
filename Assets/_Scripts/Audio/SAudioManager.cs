@@ -3,15 +3,12 @@ using System;
 
 public class SAudioManager : MonoBehaviour
 {
+    public static SAudioManager Instance;
 
     // MG added floats for audio settings
     public float masterVolume = 1f;
     public float musicVolume = 1f;
     public float caseohVolume = 1f;
-
-
-    public static SAudioManager Instance;
-
 
     public SSound[] sounds;
     void Awake()
